@@ -1,17 +1,173 @@
 ---
-
+// Esto es la "frontera" (frontmatter) de Astro
+// Aquí puedes poner lógica, pero por ahora lo dejamos vacío
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mi Portafolio de Fotografía</title>
+    <style>
+      /* Estilos para tu portafolio */
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #0a0a0a;
+        color: #ffffff;
+        min-height: 100vh;
+        padding: 40px 20px;
+      }
+      
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      
+      h1 {
+        font-size: 3rem;
+        font-weight: 300;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+      }
+      
+      .subtitulo {
+        color: #888;
+        font-size: 1.2rem;
+        margin-bottom: 40px;
+        border-bottom: 1px solid #333;
+        padding-bottom: 20px;
+      }
+      
+      .galeria {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+      }
+      
+      .galeria-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px;
+        background: #1a1a1a;
+        aspect-ratio: 4 / 3;
+      }
+      
+      .galeria-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+      
+      .galeria-item:hover img {
+        transform: scale(1.05);
+      }
+      
+      .galeria-item .overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 20px;
+        background: linear-gradient(transparent, rgba(0,0,0,0.8));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      
+      .galeria-item:hover .overlay {
+        opacity: 1;
+      }
+      
+      .galeria-item .overlay h3 {
+        font-size: 1rem;
+        font-weight: 400;
+      }
+      
+      /* Mensaje si no hay fotos */
+      .sin-fotos {
+        text-align: center;
+        padding: 60px 20px;
+        color: #666;
+        border: 2px dashed #333;
+        border-radius: 16px;
+        grid-column: 1 / -1;
+      }
+      
+      .sin-fotos span {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>📸 Mi Portafolio</h1>
+      <p class="subtitulo">Fotografía · Momentos · Narrativa visual</p>
+
+      <div class="galeria">
+        <!-- 
+          📌 AQUÍ VAN TUS FOTOS
+          Reemplaza "foto1.jpg", "foto2.jpg", etc. con los nombres
+          reales de tus archivos que coloques en la carpeta public/
+        -->
+        
+        <div class="galeria-item">
+          <img src="/foto1.jpg" alt="Descripción de la foto 1" />
+          <div class="overlay">
+            <h3>Proyecto Alba</h3>
+          </div>
+        </div>
+        
+        <div class="galeria-item">
+          <img src="/foto2.jpg" alt="Descripción de la foto 2" />
+          <div class="overlay">
+            <h3>Naturaleza viva</h3>
+          </div>
+        </div>
+        
+        <div class="galeria-item">
+          <img src="/foto3.jpg" alt="Descripción de la foto 3" />
+          <div class="overlay">
+            <h3>Retratos urbanos</h3>
+          </div>
+        </div>
+
+        <!-- 
+          🔧 Ejemplo de cómo agregar más fotos:
+          Copia esta estructura y cambia el src y el texto:
+          
+          <div class="galeria-item">
+            <img src="/mi-foto.jpg" alt="Mi foto" />
+            <div class="overlay">
+              <h3>Nombre de la serie</h3>
+            </div>
+          </div>
+        -->
+      </div>
+
+      <!-- Mensaje de ayuda (se oculta cuando agregues fotos) -->
+      <div class="sin-fotos" id="mensaje-ayuda">
+        <span>🖼️</span>
+        <p>Agrega tus fotos en la carpeta <code>public/</code> y actualiza el código con los nombres de los archivos.</p>
+        <p style="margin-top: 10px; font-size: 0.9rem; color: #444;">
+          Edita este archivo en <code>src/pages/index.astro</code>
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // Esto oculta el mensaje de ayuda si hay imágenes cargadas
+      document.addEventListener('DOMContentLoaded', () => {
+        const imagenes = document.querySelectorAll('.galeria img');
+        const mensajeAyuda = document.getElementById('mensaje-ayuda');
+        if (imagenes.length > 0) {
+          mensajeAyuda.style.display = 'none';
+        }
+      });
+    </script>
+  </body>
 </html>
