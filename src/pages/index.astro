@@ -8,7 +8,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reflections Audio Visual - Portafolio de Fotografía</title>
+    <title>Reflections Audio Visual - Fotografía y Video Profesional</title>
     <style>
       /* Estilos para tu portafolio */
       * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -106,7 +106,7 @@
   <body>
     <div class="container">
       <h1>📸 Reflections Audio Visual</h1>
-      <p class="subtitulo">Fotografía · Momentos · Narrativa visual</p>
+      <p class="subtitulo">Fotografía · Video · Momentos inolvidables</p>
 
       <div class="galeria">
         <!-- 
@@ -116,21 +116,21 @@
         -->
         
         <div class="galeria-item">
-          <img src="/foto1.jpg" alt="Descripción de la foto 1" />
+          <img src="/foto1.jpg" alt="Sesión de fotografía profesional" />
           <div class="overlay">
             <h3>Proyecto Alba</h3>
           </div>
         </div>
         
         <div class="galeria-item">
-          <img src="/foto2.jpg" alt="Descripción de la foto 2" />
+          <img src="/foto2.jpg" alt="Fotografía de naturaleza" />
           <div class="overlay">
             <h3>Naturaleza viva</h3>
           </div>
         </div>
         
         <div class="galeria-item">
-          <img src="/foto3.jpg" alt="Descripción de la foto 3" />
+          <img src="/foto3.jpg" alt="Retrato urbano" />
           <div class="overlay">
             <h3>Retratos urbanos</h3>
           </div>
@@ -176,7 +176,7 @@
         box-shadow: 0 4px 16px rgba(0,0,0,0.3);
         transition: transform 0.3s ease;
       ">
-        📸
+        💬
       </button>
       
       <!-- Ventana de chat (oculta por defecto) -->
@@ -205,8 +205,8 @@
         ">
           <span style="font-size: 20px;">📸</span>
           <div>
-            <div style="font-size: 16px;">Reflections Assistant</div>
-            <div style="font-size: 12px; opacity: 0.7;">Ask me anything!</div>
+            <div style="font-size: 16px;">Asistente de Reflections</div>
+            <div style="font-size: 12px; opacity: 0.7;">¡Pregúntame lo que necesites!</div>
           </div>
           <button id="chat-close" style="
             margin-left: auto;
@@ -227,8 +227,8 @@
           background: #faf8f5;
         ">
           <div style="text-align: center; color: #999; font-size: 14px; padding: 20px 0;">
-            👋 Hi, I'm the Reflections assistant<br>
-            How can I help you today?
+            👋 ¡Hola! Soy el asistente de Reflections Audio Visual<br>
+            ¿En qué puedo ayudarte hoy?
           </div>
         </div>
         
@@ -243,7 +243,7 @@
           <input 
             id="chat-input" 
             type="text" 
-            placeholder="Type your message..." 
+            placeholder="Escribe tu mensaje aquí..." 
             style="
               flex: 1; 
               padding: 10px 14px; 
@@ -267,7 +267,7 @@
             font-weight: 500;
             transition: background 0.3s;
           ">
-            Send
+            Enviar
           </button>
         </div>
       </div>
@@ -275,7 +275,7 @@
 
     <script>
       // ============================================
-      // 🎯 LÓGICA DEL CHAT (CORREGIDA)
+      // 🎯 LÓGICA DEL CHAT
       // ============================================
       const toggleBtn = document.getElementById('chat-toggle');
       const closeBtn = document.getElementById('chat-close');
@@ -310,13 +310,13 @@
         // Indicador de "escribiendo..."
         const typing = document.createElement('div');
         typing.style.cssText = 'margin: 8px 0; color: #999; font-size: 14px;';
-        typing.textContent = '✍️ Writing...';
+        typing.textContent = '✍️ Escribiendo...';
         messagesDiv.appendChild(typing);
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
         try {
-          // ✅ CORREGIDO: Ahora usa /api/chat en lugar de /.netlify/functions/chat
-          const response = await fetch('/api/chat', {
+          // 🔧 CORREGIDO: URL correcta para Netlify Functions
+          const response = await fetch('/.netlify/functions/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
@@ -365,7 +365,7 @@
           messagesDiv.removeChild(typing);
           const errorMsg = document.createElement('div');
           errorMsg.style.cssText = 'text-align: center; color: #e74c3c; font-size: 13px; margin: 8px 0;';
-          errorMsg.textContent = '❌ Sorry, there was an error. Please try again.';
+          errorMsg.textContent = '❌ Lo siento, hubo un error. Por favor, intenta de nuevo.';
           messagesDiv.appendChild(errorMsg);
         }
         messagesDiv.scrollTop = messagesDiv.scrollHeight;

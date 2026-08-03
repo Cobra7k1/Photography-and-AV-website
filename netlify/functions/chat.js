@@ -1,14 +1,14 @@
-// src/functions/chat.js
+// netlify/functions/chat.js
 import OpenAI from "openai";
 
-export const onRequest = async (context) => {
+export default async (request, context) => {
   // Solo acepta POST
-  if (context.request.method !== 'POST') {
+  if (request.method !== 'POST') {
     return new Response('Method Not Allowed', { status: 405 });
   }
 
   try {
-    const { messages } = await context.request.json();
+    const { messages } = await request.json();
 
     const systemPrompt = `Eres un asistente virtual para Reflections Audio Visual, un servicio profesional de fotografía y video.
     
@@ -19,7 +19,14 @@ export const onRequest = async (context) => {
     - Email: reflectionsmedia56@gmail.com
     - Teléfono: 972-684-1773
     - Instagram: @reflections_audiovisual
-    - Website: https://lucent-starburst-4d93c6.netlify.app/`;
+    - Website: https://lucent-starburst-4d93c6.netlify.app/
+    
+    RESPUESTAS:
+    1. Responde en el MISMO IDIOMA que te escriben (inglés o español)
+    2. Sé amable, profesional y entusiasta
+    3. Si preguntan sobre precios, da la información que tengas
+    4. Si quieren agendar una cita, solicita: nombre, email, teléfono y servicio
+    5. Ofrece siempre el número de contacto o email para más información`;
 
     const openai = new OpenAI();
 
