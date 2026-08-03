@@ -8,7 +8,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mi Portafolio de Fotografía</title>
+    <title>Reflections Audio Visual - Portafolio de Fotografía</title>
     <style>
       /* Estilos para tu portafolio */
       * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -105,7 +105,7 @@
   </head>
   <body>
     <div class="container">
-      <h1>📸 Mi Portafolio</h1>
+      <h1>📸 Reflections Audio Visual</h1>
       <p class="subtitulo">Fotografía · Momentos · Narrativa visual</p>
 
       <div class="galeria">
@@ -135,18 +135,6 @@
             <h3>Retratos urbanos</h3>
           </div>
         </div>
-
-        <!-- 
-          🔧 Ejemplo de cómo agregar más fotos:
-          Copia esta estructura y cambia el src y el texto:
-          
-          <div class="galeria-item">
-            <img src="/mi-foto.jpg" alt="Mi foto" />
-            <div class="overlay">
-              <h3>Nombre de la serie</h3>
-            </div>
-          </div>
-        -->
       </div>
 
       <!-- Mensaje de ayuda (se oculta cuando agregues fotos) -->
@@ -169,5 +157,229 @@
         }
       });
     </script>
+
+    <!-- ============================================ -->
+    <!-- 💬 WIDGET DE CHAT - REFLECTIONS AUDIO VISUAL -->
+    <!-- ============================================ -->
+    <div id="chat-widget" style="position:fixed; bottom:20px; right:20px; z-index:9999; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+      
+      <!-- Botón para abrir/cerrar -->
+      <button id="chat-toggle" style="
+        background: #1a1a1a; 
+        color: white; 
+        border: none; 
+        border-radius: 50%;
+        width: 60px; 
+        height: 60px; 
+        font-size: 28px; 
+        cursor: pointer; 
+        box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        transition: transform 0.3s ease;
+      ">
+        📸
+      </button>
+      
+      <!-- Ventana de chat (oculta por defecto) -->
+      <div id="chat-window" style="
+        display: none; 
+        position: absolute; 
+        bottom: 70px; 
+        right: 0;
+        width: 380px; 
+        height: 520px; 
+        background: white; 
+        border-radius: 16px;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.25); 
+        overflow: hidden;
+        flex-direction: column;
+      ">
+        <!-- Header -->
+        <div style="
+          background: #1a1a1a; 
+          color: white; 
+          padding: 16px 20px; 
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        ">
+          <span style="font-size: 20px;">📸</span>
+          <div>
+            <div style="font-size: 16px;">Reflections Assistant</div>
+            <div style="font-size: 12px; opacity: 0.7;">Ask me anything!</div>
+          </div>
+          <button id="chat-close" style="
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0.7;
+          ">✕</button>
+        </div>
+        
+        <!-- Área de mensajes -->
+        <div id="chat-messages" style="
+          flex: 1; 
+          padding: 16px; 
+          overflow-y: auto; 
+          background: #faf8f5;
+        ">
+          <div style="text-align: center; color: #999; font-size: 14px; padding: 20px 0;">
+            👋 Hi, I'm the Reflections assistant<br>
+            How can I help you today?
+          </div>
+        </div>
+        
+        <!-- Input -->
+        <div style="
+          display: flex; 
+          border-top: 1px solid #eee; 
+          padding: 12px 16px; 
+          gap: 8px;
+          background: white;
+        ">
+          <input 
+            id="chat-input" 
+            type="text" 
+            placeholder="Type your message..." 
+            style="
+              flex: 1; 
+              padding: 10px 14px; 
+              border: 1px solid #ddd; 
+              border-radius: 8px; 
+              outline: none;
+              font-size: 14px;
+              transition: border 0.3s;
+            "
+            onfocus="this.style.borderColor='#1a1a1a'"
+            onblur="this.style.borderColor='#ddd'"
+          >
+          <button id="chat-send" style="
+            background: #1a1a1a; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 8px; 
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.3s;
+          ">
+            Send
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ============================================
+      // 🎯 LÓGICA DEL CHAT (CORREGIDA)
+      // ============================================
+      const toggleBtn = document.getElementById('chat-toggle');
+      const closeBtn = document.getElementById('chat-close');
+      const chatWindow = document.getElementById('chat-window');
+      const messagesDiv = document.getElementById('chat-messages');
+      const input = document.getElementById('chat-input');
+      const sendBtn = document.getElementById('chat-send');
+
+      // Abrir/cerrar chat
+      toggleBtn.addEventListener('click', () => {
+        const isOpen = chatWindow.style.display === 'flex';
+        chatWindow.style.display = isOpen ? 'none' : 'flex';
+      });
+
+      closeBtn.addEventListener('click', () => {
+        chatWindow.style.display = 'none';
+      });
+
+      // Función para enviar mensaje
+      async function sendMessage(text) {
+        if (!text.trim()) return;
+        
+        // Agregar mensaje del usuario
+        const userMsg = document.createElement('div');
+        userMsg.style.cssText = 'text-align: right; margin: 8px 0;';
+        userMsg.innerHTML = `<span style="background: #1a1a1a; color: white; padding: 10px 14px; border-radius: 16px; display: inline-block; max-width: 80%; font-size: 14px;">${text}</span>`;
+        messagesDiv.appendChild(userMsg);
+        
+        input.value = '';
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+        // Indicador de "escribiendo..."
+        const typing = document.createElement('div');
+        typing.style.cssText = 'margin: 8px 0; color: #999; font-size: 14px;';
+        typing.textContent = '✍️ Writing...';
+        messagesDiv.appendChild(typing);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+        try {
+          // ✅ CORREGIDO: Ahora usa /api/chat en lugar de /.netlify/functions/chat
+          const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              messages: [{ role: 'user', content: text }] 
+            })
+          });
+
+          if (!response.ok) throw new Error('Error en el servidor');
+          
+          messagesDiv.removeChild(typing);
+          
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder();
+          let fullResponse = '';
+          
+          const assistantMsg = document.createElement('div');
+          assistantMsg.style.cssText = 'text-align: left; margin: 8px 0;';
+          assistantMsg.innerHTML = `<span style="background: #e8e0d8; color: #1a1a1a; padding: 10px 14px; border-radius: 16px; display: inline-block; max-width: 80%; font-size: 14px;"></span>`;
+          messagesDiv.appendChild(assistantMsg);
+          
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            
+            const chunk = decoder.decode(value);
+            const lines = chunk.split('\n');
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                const data = line.slice(6);
+                if (data === '[DONE]') continue;
+                try {
+                  const parsed = JSON.parse(data);
+                  const content = parsed.choices?.[0]?.delta?.content || '';
+                  if (content) {
+                    fullResponse += content;
+                    assistantMsg.querySelector('span').textContent = fullResponse;
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                  }
+                } catch (e) {
+                  // Ignorar errores de parsing
+                }
+              }
+            }
+          }
+        } catch (error) {
+          messagesDiv.removeChild(typing);
+          const errorMsg = document.createElement('div');
+          errorMsg.style.cssText = 'text-align: center; color: #e74c3c; font-size: 13px; margin: 8px 0;';
+          errorMsg.textContent = '❌ Sorry, there was an error. Please try again.';
+          messagesDiv.appendChild(errorMsg);
+        }
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+
+      // Eventos de envío
+      sendBtn.addEventListener('click', () => sendMessage(input.value));
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage(input.value);
+        }
+      });
+    </script>
+
   </body>
 </html>
