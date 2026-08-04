@@ -1,4 +1,3 @@
-// netlify/functions/chat.js
 import OpenAI from "openai";
 
 export default async (request, context) => {
@@ -19,7 +18,7 @@ export default async (request, context) => {
     - Email: reflectionsmedia56@gmail.com
     - Teléfono: 972-684-1773
     - Instagram: @reflections_audiovisual
-    - Website: https://lucent-starburst-4d93c6.netlify.app/
+    - Website: https://messagesassitant.netlify.app/
     
     RESPUESTAS:
     1. Responde en el MISMO IDIOMA que te escriben (inglés o español)
