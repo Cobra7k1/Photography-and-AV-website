@@ -1,5 +1,4 @@
-import OpenAI from "openai";
-
+// netlify/functions/chat.js - CON DEEPSEEK
 export default async (request, context) => {
   // Solo acepta POST
   if (request.method !== 'POST') {
@@ -9,48 +8,68 @@ export default async (request, context) => {
   try {
     const { messages } = await request.json();
 
-    const systemPrompt = `Eres un asistente virtual para Reflections Audio Visual, un servicio profesional de fotografía y video.
-    
-    INFORMACIÓN DEL NEGOCIO:
-    - Nombre: Reflections Audio Visual
-    - Especialidad: Fotografía de bodas, proposals, eventos sociales, sesiones para músicos
-    - Ubicación: Dallas, Texas
-    - Email: reflectionsmedia56@gmail.com
-    - Teléfono: 972-684-1773
-    - Instagram: @reflections_audiovisual
-    - Website: https://messagesassitant.netlify.app/
-    
-    RESPUESTAS:
-    1. Responde en el MISMO IDIOMA que te escriben (inglés o español)
-    2. Sé amable, profesional y entusiasta
-    3. Si preguntan sobre precios, da la información que tengas
-    4. Si quieren agendar una cita, solicita: nombre, email, teléfono y servicio
-    5. Ofrece siempre el número de contacto o email para más información`;
+    // Obtener la clave de API de las variables de entorno
+    const apiKey = process.env.DEEPSEEK_API_KEY;
+    if (!apiKey) {
+      return new Response(JSON.stringify({ error: 'Falta la clave de API de DeepSeek' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
 
-    const openai = new OpenAI();
-
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: 'system', content: systemPrompt },
-        ...messages.slice(-20)
-      ],
-      stream: true,
-      max_tokens: 500,
-      temperature: 0.7
+    const response = await fetch('https://api.deepseek.com/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: "deepseek-v4-flash", // Modelo rápido y económico [citation:4]
+        messages: [
+          { 
+            role: 'system', 
+            content: `Eres el asistente de Reflections Audio Visual, un fotógrafo profesional en Dallas, Texas.
+            
+            Información de contacto:
+            - Email: reflectionsmedia56@gmail.com
+            - Teléfono: 972-684-1773
+            - Instagram: @reflections_audiovisual
+            - Precios: Sesión 1h $200, 2h $350, Bodas $1,500
+            
+            Responde en el mismo idioma que el usuario.
+            Sé amable y profesional.`
+          },
+          ...messages.slice(-20)
+        ],
+        stream: true,
+        max_tokens: 500,
+        temperature: 0.7
+      })
     });
 
-    return new Response(response.toReadableStream(), {
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Error de DeepSeek:', response.status, errorText);
+      return new Response(JSON.stringify({
+        error: `Error DeepSeek: ${response.status}`
+      }), {
+        status: response.status,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    return new Response(response.body, {
       headers: {
         'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache'
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive'
       }
     });
 
   } catch (error) {
     console.error('Error en chat:', error);
     return new Response(JSON.stringify({
-      error: 'Lo siento, hubo un error. Por favor, intenta de nuevo.'
+      error: 'Error: ' + error.message
     }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
