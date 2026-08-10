@@ -1,5 +1,6 @@
 ---
-// Frontmatter - puedes agregar lógica aquí después
+// src/pages/calendario.astro
+import ContactForm from '../components/ContactForm.astro';
 ---
 
 <!DOCTYPE html>
@@ -8,7 +9,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Calendario - Reflections Audio Visual</title>
-    <!-- Font Awesome para íconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -25,11 +25,12 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 40px 20px;
         }
 
+        /* Header */
         .header-calendar {
             display: flex;
             justify-content: space-between;
@@ -40,7 +41,7 @@
         }
 
         .header-calendar h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 300;
             letter-spacing: 2px;
         }
@@ -56,7 +57,7 @@
             border-radius: 40px;
             padding: 10px 24px;
             color: #ffffff;
-            font-size: 1rem;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
@@ -71,83 +72,117 @@
             transform: translateX(-3px);
         }
 
-        .calendar-placeholder {
+        /* Calendario */
+        .calendar-wrapper {
             background: #1a1a1a;
             border-radius: 16px;
-            padding: 60px 40px;
+            padding: 40px 30px;
             text-align: center;
-            border: 1px dashed #333;
+            border: 1px solid #333;
         }
 
-        .calendar-placeholder i {
-            font-size: 4rem;
+        .calendar-wrapper .icono {
+            font-size: 3rem;
             color: #3b82f6;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
-        .calendar-placeholder h2 {
+        .calendar-wrapper h2 {
             font-weight: 300;
-            font-size: 1.8rem;
-            margin-bottom: 12px;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
         }
 
-        .calendar-placeholder p {
+        .calendar-wrapper .descripcion {
             color: #888;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            margin-bottom: 10px;
         }
 
-        .days-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 8px;
-            margin-top: 30px;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
+        /* Controles de navegación */
+        .calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 500px;
+            margin: 0 auto 20px;
+            padding: 0 10px;
         }
 
-        .day-cell {
-            background: #222;
-            padding: 12px 8px;
+        .calendar-nav button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #333;
             border-radius: 8px;
-            text-align: center;
+            color: white;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
             font-size: 0.9rem;
+        }
+
+        .calendar-nav button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #3b82f6;
+        }
+
+        .calendar-nav .month-year {
             color: #aaa;
-            transition: all 0.2s ease;
+            font-size: 1.1rem;
+            font-weight: 300;
         }
 
-        .day-cell.available {
-            background: #1a3a2a;
-            color: #4ade80;
-            border: 1px solid #2a5a3a;
+        /* Tabla */
+        .calendar-table {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            border-collapse: collapse;
         }
 
-        .day-cell.unavailable {
-            background: #3a1a1a;
-            color: #f87171;
-            border: 1px solid #5a2a2a;
-        }
-
-        .day-cell.available:hover {
-            background: #2a5a3a;
-            transform: scale(1.05);
-        }
-
-        .day-label {
+        .calendar-table th {
             color: #666;
             font-size: 0.8rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            text-align: center;
-            padding: 8px 0;
+            padding: 10px 8px;
+            border-bottom: 1px solid #333;
         }
 
+        .calendar-table td {
+            padding: 12px 8px;
+            text-align: center;
+            font-size: 1rem;
+            color: #aaa;
+            border-bottom: 1px solid #222;
+            transition: all 0.2s ease;
+        }
+
+        .calendar-table td.available {
+            color: #4ade80;
+            cursor: pointer;
+        }
+
+        .calendar-table td.available:hover {
+            background: #1a3a2a;
+            border-radius: 6px;
+            transform: scale(1.05);
+        }
+
+        .calendar-table td.unavailable {
+            color: #f87171;
+        }
+
+        .calendar-table td.empty {
+            color: #333;
+        }
+
+        /* Leyenda */
         .legend {
             display: flex;
             justify-content: center;
             gap: 30px;
-            margin-top: 20px;
+            margin-top: 25px;
             font-size: 0.9rem;
             flex-wrap: wrap;
         }
@@ -160,9 +195,10 @@
         }
 
         .legend-dot {
-            width: 14px;
-            height: 14px;
-            border-radius: 4px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
         }
 
         .legend-dot.green {
@@ -172,7 +208,18 @@
             background: #f87171;
         }
 
-        @media (max-width: 768px) {
+        /* Contacto */
+        .contact-wrapper {
+            margin-top: 50px;
+            border-top: 1px solid #333;
+            padding-top: 40px;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 20px 12px;
+            }
+
             .header-calendar {
                 flex-direction: column;
                 gap: 16px;
@@ -180,26 +227,47 @@
             }
 
             .header-calendar h1 {
-                font-size: 1.8rem;
+                font-size: 1.5rem;
             }
 
-            .calendar-placeholder {
-                padding: 30px 20px;
+            .calendar-wrapper {
+                padding: 24px 16px;
             }
 
-            .days-grid {
-                gap: 4px;
-            }
-
-            .day-cell {
+            .calendar-table td {
                 padding: 8px 4px;
-                font-size: 0.75rem;
+                font-size: 0.85rem;
+            }
+
+            .calendar-table th {
+                font-size: 0.7rem;
+                padding: 8px 4px;
+            }
+
+            .legend {
+                gap: 16px;
+                font-size: 0.8rem;
+            }
+
+            .calendar-nav .month-year {
+                font-size: 0.9rem;
+            }
+
+            .calendar-nav button {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+
+            .contact-wrapper {
+                margin-top: 30px;
+                padding-top: 30px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header-calendar">
             <h1>
                 <i class="fas fa-calendar-alt"></i>
@@ -211,37 +279,42 @@
             </a>
         </div>
 
-        <div class="calendar-placeholder">
-            <i class="fas fa-calendar-check"></i>
+        <!-- Calendario Dinámico -->
+        <div class="calendar-wrapper">
+            <div class="icono">
+                <i class="fas fa-calendar-check"></i>
+            </div>
             <h2>Calendario de Sesiones</h2>
-            <p>Selecciona una fecha disponible para tu sesión de fotografía</p>
+            <p class="descripcion">
+                Selecciona una fecha disponible para tu sesión de fotografía
+            </p>
 
-            <div class="days-grid">
-                <div class="day-label">Lun</div>
-                <div class="day-label">Mar</div>
-                <div class="day-label">Mié</div>
-                <div class="day-label">Jue</div>
-                <div class="day-label">Vie</div>
-                <div class="day-label">Sáb</div>
-                <div class="day-label">Dom</div>
-
-                <div class="day-cell">1</div>
-                <div class="day-cell available">2</div>
-                <div class="day-cell">3</div>
-                <div class="day-cell unavailable">4</div>
-                <div class="day-cell available">5</div>
-                <div class="day-cell">6</div>
-                <div class="day-cell">7</div>
-
-                <div class="day-cell available">8</div>
-                <div class="day-cell">9</div>
-                <div class="day-cell available">10</div>
-                <div class="day-cell">11</div>
-                <div class="day-cell unavailable">12</div>
-                <div class="day-cell available">13</div>
-                <div class="day-cell">14</div>
+            <!-- Navegación de meses -->
+            <div class="calendar-nav">
+                <button id="prevMonth">‹</button>
+                <span class="month-year" id="monthYear">Agosto 2026</span>
+                <button id="nextMonth">›</button>
             </div>
 
+            <!-- Tabla del calendario -->
+            <table class="calendar-table" id="calendarTable">
+                <thead>
+                    <tr>
+                        <th>LUN</th>
+                        <th>MAR</th>
+                        <th>MIÉ</th>
+                        <th>JUE</th>
+                        <th>VIE</th>
+                        <th>SÁB</th>
+                        <th>DOM</th>
+                    </tr>
+                </thead>
+                <tbody id="calendarBody">
+                    <!-- Generado por JavaScript -->
+                </tbody>
+            </table>
+
+            <!-- Leyenda -->
             <div class="legend">
                 <div class="legend-item">
                     <span class="legend-dot green"></span>
@@ -253,6 +326,219 @@
                 </div>
             </div>
         </div>
+
+        <!-- ⬇️ FORMULARIO DE CONTACTO ⬇️ -->
+        <div class="contact-wrapper">
+            <ContactForm />
+        </div>
     </div>
+
+    <script>
+        // ============================================
+        // 🗓️ CALENDARIO DINÁMICO - 6 MESES A FUTURO
+        // ============================================
+        
+        // Fecha actual
+        const today = new Date();
+        const currentYear = today.getFullYear();
+        const currentMonth = today.getMonth();
+        const currentDay = today.getDate();
+        
+        // Fecha límite: 6 meses después
+        const maxMonth = currentMonth + 6;
+        const maxYear = currentYear + Math.floor(maxMonth / 12);
+        const maxMonthFinal = maxMonth % 12;
+        
+        // Mes actual visible (inicia en el mes actual)
+        let viewYear = currentYear;
+        let viewMonth = currentMonth;
+        
+        // Función para determinar si una fecha está disponible (ejemplo)
+        function isDateAvailable(year, month, day) {
+            const date = new Date(year, month, day);
+            const dayOfWeek = date.getDay(); // 0=domingo, 1=lunes...
+            
+            // Ejemplo: disponibles solo fines de semana (sábado=6, domingo=0)
+            // y algunos días específicos
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                return true;
+            }
+            
+            // Días específicos disponibles (ejemplo)
+            const availableDates = [
+                { m: 7, d: 2 },  // 2 de agosto
+                { m: 7, d: 5 },  // 5 de agosto
+                { m: 7, d: 8 },  // 8 de agosto
+                { m: 7, d: 10 }, // 10 de agosto
+                { m: 7, d: 13 }, // 13 de agosto
+            ];
+            
+            return availableDates.some(d => d.m === month && d.d === day);
+        }
+        
+        // Renderizar el calendario
+        function renderCalendar(year, month) {
+            const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                           'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            
+            // Actualizar título
+            document.getElementById('monthYear').textContent = `${months[month]} ${year}`;
+            
+            // Obtener primer día del mes (0=domingo, 1=lunes...)
+            const firstDay = new Date(year, month, 1).getDay();
+            // Ajustar para que lunes sea 0
+            let startOffset = (firstDay === 0) ? 6 : firstDay - 1;
+            
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            let html = '';
+            let dayCount = 1;
+            let started = false;
+            
+            // 6 filas (máximo de semanas en un mes)
+            for (let row = 0; row < 6; row++) {
+                html += '<tr>';
+                for (let col = 0; col < 7; col++) {
+                    if (row === 0 && col < startOffset) {
+                        // Celdas vacías al inicio
+                        html += `<td class="empty"></td>`;
+                    } else if (dayCount > daysInMonth) {
+                        // Celdas vacías al final
+                        html += `<td class="empty"></td>`;
+                    } else {
+                        // Fecha actual
+                        const dateToCheck = new Date(year, month, dayCount);
+                        const isPast = dateToCheck < new Date(currentYear, currentMonth, currentDay);
+                        const isBeyondLimit = (year > maxYear) || (year === maxYear && month > maxMonthFinal);
+                        
+                        let className = '';
+                        let clickable = '';
+                        
+                        if (isPast || isBeyondLimit) {
+                            className = 'unavailable';
+                        } else if (isDateAvailable(year, month, dayCount)) {
+                            className = 'available';
+                            // Hacer clickeable si está disponible
+                            clickable = `onclick="selectDate(${dayCount}, '${months[month]}', ${year})" style="cursor:pointer;"`;
+                        } else {
+                            className = 'unavailable';
+                        }
+                        
+                        html += `<td class="${className}" ${clickable}>${dayCount}</td>`;
+                        dayCount++;
+                    }
+                }
+                html += '</tr>';
+                if (dayCount > daysInMonth) break;
+            }
+            
+            document.getElementById('calendarBody').innerHTML = html;
+        }
+        
+        // Función al seleccionar una fecha
+        function selectDate(day, month, year) {
+            // Formatear fecha
+            const dateStr = `${day} de ${month}, ${year}`;
+            
+            // Buscar el campo de fecha en el formulario
+            const dateInput = document.querySelector('#date');
+            if (dateInput) {
+                // Formato YYYY-MM-DD para el input type="date"
+                const monthNum = new Date(`${month} 1, ${year}`).getMonth() + 1;
+                const monthStr = monthNum.toString().padStart(2, '0');
+                const dayStr = day.toString().padStart(2, '0');
+                dateInput.value = `${year}-${monthStr}-${dayStr}`;
+                
+                // Mostrar mensaje de confirmación
+                const form = dateInput.closest('form');
+                if (form) {
+                    // Scroll al formulario
+                    form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    // Cambiar placeholder del campo de fecha
+                    const dateLabel = form.querySelector('label[for="date"]');
+                    if (dateLabel) {
+                        dateLabel.innerHTML = `Preferred Date <span style="color:#4ade80;">✅ ${dateStr}</span>`;
+                    }
+                    
+                    // Mostrar notificación
+                    showNotification(`📅 Fecha seleccionada: ${dateStr}`);
+                }
+            }
+        }
+        
+        // Notificación temporal
+        function showNotification(message) {
+            const existing = document.querySelector('.date-notification');
+            if (existing) existing.remove();
+            
+            const notif = document.createElement('div');
+            notif.className = 'date-notification';
+            notif.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #1a3a2a;
+                color: #4ade80;
+                padding: 12px 24px;
+                border-radius: 12px;
+                border: 1px solid #2a5a3a;
+                font-size: 1rem;
+                z-index: 10000;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            `;
+            notif.textContent = message;
+            document.body.appendChild(notif);
+            
+            // Animación de entrada
+            setTimeout(() => { notif.style.opacity = '1'; }, 10);
+            
+            // Desaparecer después de 3 segundos
+            setTimeout(() => {
+                notif.style.opacity = '0';
+                setTimeout(() => notif.remove(), 300);
+            }, 3000);
+        }
+        
+        // Navegación entre meses
+        document.getElementById('prevMonth').addEventListener('click', () => {
+            if (viewMonth === 0) {
+                viewYear--;
+                viewMonth = 11;
+            } else {
+                viewMonth--;
+            }
+            renderCalendar(viewYear, viewMonth);
+        });
+        
+        document.getElementById('nextMonth').addEventListener('click', () => {
+            // Limitar a 6 meses en el futuro
+            const nextMonthCheck = viewMonth + 1;
+            const nextYearCheck = viewYear + Math.floor(nextMonthCheck / 12);
+            const nextMonthFinal = nextMonthCheck % 12;
+            
+            if (nextYearCheck > maxYear || (nextYearCheck === maxYear && nextMonthFinal > maxMonthFinal)) {
+                showNotification('📅 No hay más fechas disponibles para los próximos 6 meses');
+                return;
+            }
+            
+            if (viewMonth === 11) {
+                viewYear++;
+                viewMonth = 0;
+            } else {
+                viewMonth++;
+            }
+            renderCalendar(viewYear, viewMonth);
+        });
+        
+        // Renderizar calendario inicial
+        renderCalendar(viewYear, viewMonth);
+        
+        // Exponer función selectDate globalmente
+        window.selectDate = selectDate;
+    </script>
 </body>
 </html>

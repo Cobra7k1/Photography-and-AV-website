@@ -1,0 +1,165 @@
+---
+// src/components/ContactForm.astro
+---
+
+<section class="contact-section" id="contact">
+  <h2>📬 Contact Us</h2>
+  <p class="subtitle">
+    Fill out the form below and we'll get back to you within 24 hours.
+  </p>
+
+  <form
+    action="https://formspree.io/f/mgawazkr"
+    method="POST"
+    class="contact-form"
+  >
+    <div class="form-group">
+      <label for="name">Full Name *</label>
+      <input type="text" id="name" name="name" required placeholder="John Doe" />
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email Address *</label>
+      <input type="email" id="email" name="email" required placeholder="john@example.com" />
+    </div>
+
+    <div class="form-group">
+      <label for="date">Preferred Date <span class="optional">(optional)</span></label>
+      <input type="date" id="date" name="date" />
+    </div>
+
+    <div class="form-group">
+      <label for="message">Message *</label>
+      <textarea id="message" name="message" rows="4" required placeholder="Tell us about your photography needs..."></textarea>
+    </div>
+
+    <button type="submit" class="btn-submit">📧 Send Message</button>
+  </form>
+
+  <p class="alt-contact">
+    Or email us directly: <a href="mailto:reflectionsmedia56@gmail.com">reflectionsmedia56@gmail.com</a>
+  </p>
+</section>
+
+<style>
+  .contact-section {
+    margin-top: 20px;
+    padding: 2rem;
+    background: #1a1a1a;
+    border-radius: 16px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid #333;
+  }
+
+  .contact-section h2 {
+    text-align: center;
+    margin-bottom: 0.25rem;
+    font-size: 1.8rem;
+    color: #ffffff;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: #888;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-group label {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    font-size: 0.95rem;
+    color: #e0e0e0;
+  }
+
+  .optional {
+    font-weight: 400;
+    color: #888;
+    font-size: 0.85rem;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    padding: 0.75rem;
+    border: 1px solid #333;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: inherit;
+    background: #0a0a0a;
+    color: #ffffff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: #555;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  }
+
+  .btn-submit {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 0.85rem 1.5rem;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .btn-submit:hover {
+    background: #2563eb;
+  }
+
+  .btn-submit:active {
+    transform: scale(0.97);
+  }
+
+  .alt-contact {
+    margin-top: 1.25rem;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #888;
+  }
+
+  .alt-contact a {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .alt-contact a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 640px) {
+    .contact-section {
+      padding: 1.5rem;
+      margin: 0 10px;
+    }
+
+    .contact-section h2 {
+      font-size: 1.4rem;
+    }
+  }
+</style>
