@@ -15,7 +15,7 @@ export default async (request, context) => {
     const userMessage = messages[messages.length - 1]?.content || '';
     console.log('💬 Último mensaje:', userMessage);
 
-    const apiKey = 'sk-789a0300a29748afa638c00efd441bdc';
+    const apiKey = process.env.DEEPSEEK_API_KEY;
     console.log('🔑 Clave API configurada');
 
     const systemPrompt = `Eres el asistente de Reflections Audio Visual, un fotógrafo profesional en Dallas, Texas.
