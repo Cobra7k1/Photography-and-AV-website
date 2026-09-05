@@ -1,5 +1,124 @@
 ---
-// Página de galería de fotos
+// src/pages/galeria-fotos.astro
+import { Image } from 'astro:assets';
+
+// ============================================
+// 📸 TODAS LAS FOTOS (con tus nombres actuales)
+// ============================================
+
+import foto1 from '../images/fotos/bella-pareja.jpg';
+import foto2 from '../images/fotos/estudio-fotografia-salt-lake.jpg';
+import foto3 from '../images/fotos/estudio-fotos-salt-lake.jpg';
+import foto4 from '../images/fotos/estudio-salt-lake-foto.jpg';
+import foto5 from '../images/fotos/fotografia-bodas.jpg';
+import foto6 from '../images/fotos/fotografia-cinematografica.jpg';
+import foto7 from '../images/fotos/fotografia-embarazo-artistica.jpg';
+import foto8 from '../images/fotos/fotografia-estudio-profesional-salt-lake.jpg';
+import foto9 from '../images/fotos/fotografia-estudio.jpg';
+import foto10 from '../images/fotos/fotografia-eventos.jpg';
+import foto11 from '../images/fotos/fotografia-familiar.jpg';
+import foto12 from '../images/fotos/fotografia-parejas-estudio.jpg';
+import foto13 from '../images/fotos/fotografia-parejas.jpg';
+import foto14 from '../images/fotos/fotografia-profesional-salt-lake-utah.jpg';
+import foto15 from '../images/fotos/fotografia-propuestas-matrimoniales.jpg';
+import foto16 from '../images/fotos/fotografia-romantica-parejas.jpg';
+import foto17 from '../images/fotos/fotografia-romantica-salt-lake-city.jpg';
+import foto18 from '../images/fotos/fotografia-salt-flats-great-salt-lake.jpg';
+import foto19 from '../images/fotos/fotografia-salt-lake.jpg';
+import foto20 from '../images/fotos/fotografia-video-eventos.jpg';
+import foto21 from '../images/fotos/fotografia-video-salt-flats-utah.jpg';
+import foto22 from '../images/fotos/fotografo-eventos.jpg';
+import foto23 from '../images/fotos/fotografo-profesional-salt-lake.jpg';
+import foto24 from '../images/fotos/fotografo-propuestas-matrimonio.jpg';
+import foto25 from '../images/fotos/fotografos-profesionales-salt-lake.jpg';
+import foto26 from '../images/fotos/pareja-propuesta-salt-lake.jpg';
+import foto27 from '../images/fotos/pareja-salt-lake-city.jpg';
+import foto28 from '../images/fotos/propuesta-arco-corazon.jpg';
+import foto29 from '../images/fotos/propuesta-epica-salt-lake.jpg';
+import foto30 from '../images/fotos/propuesta-epica.jpg';
+import foto31 from '../images/fotos/propuesta-gran-lago-salado.jpg';
+import foto32 from '../images/fotos/propuesta-matrimonio-salt-flats.jpg';
+import foto33 from '../images/fotos/propuesta-pareja-romantica.jpg';
+import foto34 from '../images/fotos/propuesta-romantica-salt-lake.jpg';
+import foto35 from '../images/fotos/propuesta-salt-lake-city.jpg';
+import foto36 from '../images/fotos/propuesta-salt-lake-utah.jpg';
+import foto37 from '../images/fotos/propuesta-salt-lake.jpg';
+import foto38 from '../images/fotos/retrato-estudio.jpg';
+import foto39 from '../images/fotos/retrato-salt-lake.jpg';
+import foto40 from '../images/fotos/salt-lake-embarazo-sesion.jpg';
+import foto41 from '../images/fotos/sesion-embarazo-maternidad.jpg';
+import foto42 from '../images/fotos/sesion-embarazo-profesional-salt-lake.jpg';
+import foto43 from '../images/fotos/sesion-estudio.jpg';
+import foto44 from '../images/fotos/sesion-familiar-salt-lake.jpg';
+import foto45 from '../images/fotos/sesion-familiar.jpg';
+import foto46 from '../images/fotos/sesion-fotografica-salt-lake-city.jpg';
+import foto47 from '../images/fotos/sesion-fotos-pareja-romantica.jpg';
+import foto48 from '../images/fotos/sesion-fotos-profesional-salt-lake.jpg';
+import foto49 from '../images/fotos/sesion-fotos-salt-flats-utah.jpg';
+import foto50 from '../images/fotos/sesion-pareja-salt-lake.jpg';
+import foto51 from '../images/fotos/sesion-pareja.jpg';
+import foto52 from '../images/fotos/sesion-parejas.jpg';
+import foto53 from '../images/fotos/sesion-propuesta-compromiso.jpg';
+import foto54 from '../images/fotos/sesion-romantica-atardecer-salt-lake.jpg';
+import foto55 from '../images/fotos/sesion-romantica-pareja-salt-lake.jpg';
+
+const fotos = [
+  { src: foto1, alt: 'Pareja romántica en sesión de fotos profesional en Salt Lake City, Utah.' },
+  { src: foto2, alt: 'Estudio de fotografía profesional en Salt Lake City, Utah. Espacio para sesiones creativas.' },
+  { src: foto3, alt: 'Estudio fotográfico en Salt Lake City, Utah. Equipo profesional para sesiones de alta calidad.' },
+  { src: foto4, alt: 'Estudio de fotografía en Salt Lake City, Utah. Instalaciones modernas para retratos y sesiones.' },
+  { src: foto5, alt: 'Fotografía profesional de bodas en Salt Lake City, Utah. Capturando el amor en el día más especial.' },
+  { src: foto6, alt: 'Fotografía cinematográfica de bodas en Salt Lake City, Utah. Estilo de cine para momentos únicos.' },
+  { src: foto7, alt: 'Sesión artística de embarazo en Salt Lake City, Utah. Fotografía profesional celebrando la vida.' },
+  { src: foto8, alt: 'Estudio profesional de fotografía en Salt Lake City, Utah. Equipo y espacio para sesiones de alta calidad.' },
+  { src: foto9, alt: 'Fotografía de estudio profesional en Salt Lake City, Utah. Sesiones con luz natural y elegancia.' },
+  { src: foto10, alt: 'Fotografía profesional de eventos en Salt Lake City, Utah. Cobertura de eventos corporativos y sociales.' },
+  { src: foto11, alt: 'Fotografía familiar profesional en Salt Lake City, Utah. Sesiones para toda la familia.' },
+  { src: foto12, alt: 'Fotografía para parejas en estudio en Salt Lake City, Utah. Sesión profesional con estilo.' },
+  { src: foto13, alt: 'Fotografía profesional para parejas en Salt Lake City, Utah. Capturando el amor y la conexión.' },
+  { src: foto14, alt: 'Fotografía profesional en Salt Lake City, Utah. Servicios de alta calidad para bodas y eventos.' },
+  { src: foto15, alt: 'Fotografía profesional para propuestas de matrimonio en Salt Lake City, Utah.' },
+  { src: foto16, alt: 'Fotografía romántica para parejas en Salt Lake City, Utah. Capturando el amor y la conexión.' },
+  { src: foto17, alt: 'Fotografía romántica en Salt Lake City, Utah. Sesiones profesionales para parejas y bodas.' },
+  { src: foto18, alt: 'Fotografía en los Salt Flats y Gran Lago Salado de Utah. Paisajes únicos para sesiones profesionales.' },
+  { src: foto19, alt: 'Fotografía profesional en Salt Lake City, Utah. Servicios de alta calidad para bodas y eventos.' },
+  { src: foto20, alt: 'Fotografía y video profesional para eventos en Salt Lake City, Utah. Cobertura completa.' },
+  { src: foto21, alt: 'Fotografía y video en los Salt Flats de Utah. Cobertura profesional con paisajes espectaculares.' },
+  { src: foto22, alt: 'Fotógrafo profesional de eventos en Salt Lake City, Utah. Experiencia y profesionalismo.' },
+  { src: foto23, alt: 'Fotógrafo profesional en Salt Lake City, Utah. Experiencia y calidad en cada sesión.' },
+  { src: foto24, alt: 'Fotógrafo especialista en propuestas de matrimonio en Salt Lake City, Utah.' },
+  { src: foto25, alt: 'Fotógrafos profesionales en Salt Lake City, Utah. Equipo especializado para bodas y eventos.' },
+  { src: foto26, alt: 'Pareja durante una propuesta de matrimonio en Salt Lake City, Utah. Fotografía de pareja con amor y felicidad.' },
+  { src: foto27, alt: 'Pareja de novios en sesión de fotos al atardecer en Salt Lake City, Utah. Fotografía romántica con montañas.' },
+  { src: foto28, alt: 'Propuesta de matrimonio con arco de flores en forma de corazón en Salt Lake City, Utah. Fotografía romántica.' },
+  { src: foto29, alt: 'Propuesta de matrimonio épica en Salt Lake City, Utah. Pareja celebrando su compromiso con amor.' },
+  { src: foto30, alt: 'Propuesta de matrimonio épica en Salt Lake City, Utah. Hombre arrodillado pidiendo matrimonio.' },
+  { src: foto31, alt: 'Propuesta de matrimonio en el Gran Lago Salado, Utah. Pareja celebrando su compromiso con atardecer.' },
+  { src: foto32, alt: 'Propuesta de matrimonio en los Salt Flats de Utah. Paisaje blanco y atardecer para una propuesta inolvidable.' },
+  { src: foto33, alt: 'Propuesta romántica en Salt Lake City, Utah. Pareja celebrando su compromiso en un entorno natural.' },
+  { src: foto34, alt: 'Propuesta romántica en Salt Lake City, Utah. Pareja celebrando su compromiso con atardecer.' },
+  { src: foto35, alt: 'Propuesta de matrimonio en Salt Lake City, Utah. Pareja celebrando su compromiso con montañas.' },
+  { src: foto36, alt: 'Propuesta de matrimonio en Salt Lake City, Utah. Pareja celebrando su compromiso con paisajes.' },
+  { src: foto37, alt: 'Propuesta de matrimonio en Salt Lake City, Utah. Pareja celebrando su compromiso.' },
+  { src: foto38, alt: 'Retrato profesional en estudio en Salt Lake City, Utah. Fotografía de estudio con estilo y elegancia.' },
+  { src: foto39, alt: 'Retrato profesional en Salt Lake City, Utah. Fotografía artística de retratos con luz natural.' },
+  { src: foto40, alt: 'Sesión de embarazo en Salt Lake City, Utah. Fotografía profesional y artística celebrando la vida.' },
+  { src: foto41, alt: 'Sesión de embarazo y maternidad en Salt Lake City, Utah. Fotografía profesional celebrando la vida.' },
+  { src: foto42, alt: 'Sesión de embarazo profesional en Salt Lake City, Utah. Capturando la belleza de la maternidad.' },
+  { src: foto43, alt: 'Sesión de fotos en estudio profesional en Salt Lake City, Utah. Fotografía con estilo y creatividad.' },
+  { src: foto44, alt: 'Sesión familiar en Salt Lake City, Utah. Fotografía natural y profesional en un entorno familiar.' },
+  { src: foto45, alt: 'Sesión de fotos familiar en estudio en Salt Lake City, Utah. Fotografía profesional con luz natural.' },
+  { src: foto46, alt: 'Sesión fotográfica en Salt Lake City, Utah. Fotografía profesional en exteriores con paisajes únicos.' },
+  { src: foto47, alt: 'Sesión de fotos romántica para parejas en Salt Lake City, Utah. Capturando el amor y la felicidad.' },
+  { src: foto48, alt: 'Sesión de fotos profesional en Salt Lake City, Utah. Fotografía con luz natural y paisajes urbanos.' },
+  { src: foto49, alt: 'Sesión de fotos en los Salt Flats de Utah. Paisaje blanco y atardecer para sesiones de pareja.' },
+  { src: foto50, alt: 'Sesión de fotos para parejas en Salt Lake City, Utah. Fotografía romántica con luz natural.' },
+  { src: foto51, alt: 'Sesión de fotos romántica para parejas en Salt Lake City, Utah. Capturando el amor y la conexión.' },
+  { src: foto52, alt: 'Fotografía de parejas románticas en Salt Lake City, Utah. Sesiones profesionales con estilo único.' },
+  { src: foto53, alt: 'Sesión de propuesta de matrimonio en Salt Lake City, Utah. Capturando el momento del compromiso.' },
+  { src: foto54, alt: 'Sesión romántica al atardecer en Salt Lake City, Utah. Pareja abrazándose con montañas de fondo.' },
+  { src: foto55, alt: 'Sesión romántica de pareja en Salt Lake City, Utah. Fotografía al atardecer con montañas y naturaleza.' },
+];
 ---
 
 <!DOCTYPE html>
@@ -7,14 +126,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Galería de Fotos - Reflections</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Galería de Fotos | Reflections Audio Visual</title>
+    <meta name="description" content="Galería de fotos de bodas, retratos y propuestas de matrimonio en Salt Lake City y Dallas. Fotografía profesional de Reflections Audio Visual." />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
-      /* ========================================== */
-      /* 🎨 ESTILOS - MISMO TEMA QUE LA PRINCIPAL  */
-      /* ========================================== */
       * { margin: 0; padding: 0; box-sizing: border-box; }
-      
       body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background: #0a0a0a;
@@ -22,13 +138,8 @@
         min-height: 100vh;
         padding: 40px 20px;
       }
-      
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-      
-      /* ===== ENCABEZADO ===== */
+      .container { max-width: 1400px; margin: 0 auto; }
+
       .header-galeria {
         display: flex;
         align-items: center;
@@ -37,14 +148,7 @@
         flex-wrap: wrap;
         gap: 20px;
       }
-      
-      h1 {
-        font-size: 2.5rem;
-        font-weight: 300;
-        letter-spacing: 2px;
-        margin-bottom: 10px;
-      }
-      
+      h1 { font-size: 2.5rem; font-weight: 300; letter-spacing: 2px; margin-bottom: 10px; }
       .subtitulo {
         color: #888;
         font-size: 1.2rem;
@@ -52,8 +156,7 @@
         border-bottom: 1px solid #333;
         padding-bottom: 20px;
       }
-      
-      /* ===== BOTÓN VOLVER ===== */
+
       .btn-volver {
         display: inline-flex;
         align-items: center;
@@ -69,171 +172,92 @@
         transition: all 0.3s ease;
         cursor: pointer;
       }
-      
       .btn-volver:hover {
         background: #ffffff;
         color: #0a0a0a;
         border-color: #ffffff;
         transform: translateX(-4px);
       }
-      
-      .btn-volver i {
-        font-size: 1rem;
-        transition: transform 0.3s ease;
-      }
-      
-      .btn-volver:hover i {
-        transform: translateX(-4px);
-      }
-      
-      /* ===== GALERÍA ===== */
+      .btn-volver i { font-size: 1rem; transition: transform 0.3s ease; }
+      .btn-volver:hover i { transform: translateX(-4px); }
+
+      /* ========================================== */
+      /* 🎨 ESTILO MASONRY (PINTEREST STYLE)      */
+      /* ========================================== */
       .galeria {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 20px;
+        column-count: 4;
+        column-gap: 16px;
         margin-top: 20px;
       }
-      
+
       .galeria-item {
-        position: relative;
+        break-inside: avoid;
+        margin-bottom: 16px;
         overflow: hidden;
         border-radius: 12px;
         background: #1a1a1a;
-        aspect-ratio: 4 / 3;
-        cursor: pointer;
         transition: transform 0.3s ease;
       }
-      
+
       .galeria-item:hover {
         transform: scale(1.02);
       }
-      
+
       .galeria-item img {
         width: 100%;
-        height: 100%;
-        object-fit: cover;
+        height: auto;
+        display: block;
         transition: transform 0.3s ease;
       }
-      
+
       .galeria-item:hover img {
-        transform: scale(1.05);
+        transform: scale(1.03);
       }
-      
-      .galeria-item .overlay {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: 20px;
-        background: linear-gradient(transparent, rgba(0,0,0,0.8));
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-      
-      .galeria-item:hover .overlay {
-        opacity: 1;
-      }
-      
-      .galeria-item .overlay h3 {
-        font-size: 1rem;
-        font-weight: 400;
-        color: #ffffff;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        letter-spacing: 1px;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-      }
-      
-      /* ===== MENSAJE TEMPORAL ===== */
-      .mensaje-temporal {
-        text-align: center;
-        padding: 80px 20px;
-        color: #666;
-        border: 2px dashed #333;
-        border-radius: 16px;
-        grid-column: 1 / -1;
-      }
-      
-      .mensaje-temporal span {
-        font-size: 4rem;
-        display: block;
-        margin-bottom: 20px;
-      }
-      
-      .mensaje-temporal h2 {
-        font-size: 1.5rem;
-        font-weight: 300;
-        margin-bottom: 10px;
-        color: #888;
-      }
-      
-      .mensaje-temporal p {
-        font-size: 0.95rem;
-        color: #555;
-      }
-      
-      .mensaje-temporal code {
-        background: #1a1a1a;
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-size: 0.85rem;
-        color: #888;
-      }
-      
+
       /* ===== RESPONSIVE ===== */
-      @media (max-width: 640px) {
-        h1 {
-          font-size: 1.8rem;
-        }
-        
-        .header-galeria {
-          flex-direction: column;
-          align-items: flex-start;
-        }
-        
-        .btn-volver {
-          width: 100%;
-          justify-content: center;
-        }
-        
-        .galeria {
-          grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-          gap: 12px;
-        }
+      @media (max-width: 1200px) {
+        .galeria { column-count: 3; }
+      }
+
+      @media (max-width: 768px) {
+        .galeria { column-count: 2; column-gap: 10px; }
+        .galeria-item { margin-bottom: 10px; }
+        h1 { font-size: 1.8rem; }
+        .header-galeria { flex-direction: column; align-items: flex-start; }
+        .btn-volver { width: 100%; justify-content: center; }
+      }
+
+      @media (max-width: 480px) {
+        .galeria { column-count: 1; }
+        .galeria-item { margin-bottom: 12px; }
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <!-- ===== HEADER CON BOTÓN VOLVER ===== -->
       <div class="header-galeria">
         <h1>📸 Galería de Fotos</h1>
         <a href="/" class="btn-volver">
           <i class="fas fa-arrow-left"></i> Volver al inicio
         </a>
       </div>
-      <p class="subtitulo">Mis mejores fotografías</p>
-
-      <!-- ===== GALERÍA ===== -->
+      <p class="subtitulo">Mis mejores fotografías de bodas, retratos y propuestas en Salt Lake City</p>
       <div class="galeria">
-        <!-- AQUÍ AGREGARÁS TUS FOTOS -->
-        <!-- Ejemplo:
-        <div class="galeria-item">
-          <img src="/mi-foto.jpg" alt="Descripción de mi foto" />
-          <div class="overlay">
-            <h3>Nombre de mi foto</h3>
+        {fotos.map((foto) => (
+          <div class="galeria-item">
+            <Image
+              src={foto.src}
+              alt={foto.alt}
+              width={400}
+              fit="contain"
+              quality={80}
+              loading="lazy"
+              format="webp"
+            />
           </div>
-        </div>
-        -->
-        
-        <div class="mensaje-temporal">
-          <span>🖼️</span>
-          <h2>Próximamente</h2>
-          <p>Mis mejores fotografías estarán disponibles muy pronto</p>
-          <p style="margin-top: 8px; font-size: 0.85rem;">
-            Agrega tus fotos en <code>public/</code> y actualiza esta página
-          </p>
-        </div>
+        ))}
       </div>
     </div>
   </body>
 </html>
+ 
