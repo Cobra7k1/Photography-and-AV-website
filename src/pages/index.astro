@@ -1,3 +1,4 @@
+---
 // Esto es la "frontera" (frontmatter) de Astro
 // Aquí puedes poner lógica, pero por ahora lo dejamos vacío
 ---
@@ -12,16 +13,55 @@
     <!-- ===== FONT AWESOME PARA ÍCONOS ===== -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
+    <!-- ========================================== -->
+    <!-- 🔤 FUENTE MANROPE - IMPORTADA DESDE GOOGLE -->
+    <!-- ========================================== -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
+      /* ========================================== */
+      /* 📏 SISTEMA DE TAMAÑOS - MANROPE          */
+      /* ========================================== */
+      
+      /* Títulos principales - Ultraligeros y elegantes */
+      h1 {
+        font-family: 'Manrope', sans-serif;
+        font-weight: 200;
+        font-size: 4rem;
+        letter-spacing: 2px;
+        line-height: 1.1;
+        color: #f5f3f0;
+        margin-bottom: 10px;
+      }
+
+      /* Subtítulos */
+      h2 {
+        font-family: 'Manrope', sans-serif;
+        font-weight: 300;
+        font-size: 2.8rem;
+        line-height: 1.2;
+        color: #ece8e4;
+      }
+
+      /* Encabezados de sección */
+      h3 {
+        font-family: 'Manrope', sans-serif;
+        font-weight: 400;
+        font-size: 2rem;
+        line-height: 1.3;
+        color: #f0ede8;
+      }
+
       /* ========================================== */
       /* 🎨 ESTILOS DEL PORTAFOLIO                */
       /* ========================================== */
       * { margin: 0; padding: 0; box-sizing: border-box; }
       
       body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Manrope', sans-serif;
+        font-weight: 300;
         background: #0a0a0a;
-        color: #ffffff;
+        color: #ece8e4;
         min-height: 100vh;
         padding: 40px 20px;
       }
@@ -31,19 +71,16 @@
         margin: 0 auto;
       }
       
-      h1 {
-        font-size: 3rem;
-        font-weight: 300;
-        letter-spacing: 2px;
-        margin-bottom: 10px;
-      }
-      
       .subtitulo {
-        color: #888;
-        font-size: 1.2rem;
+        font-family: 'Manrope', sans-serif;
+        font-weight: 200;
+        font-style: italic;
+        font-size: 1.3rem;
+        color: #d5d0ca;
         margin-bottom: 40px;
-        border-bottom: 1px solid #333;
+        border-bottom: 1px solid #2a2a2a;
         padding-bottom: 20px;
+        letter-spacing: 0.5px;
       }
       
       .galeria {
@@ -79,85 +116,100 @@
         transform: scale(1.05);
       }
       
+      /* ========================================== */
+      /* 🔥 OVERLAY - SIEMPRE VISIBLE CON MANROPE */
+      /* ========================================== */
       .galeria-item .overlay {
         position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
-        padding: 20px;
-        background: linear-gradient(transparent, rgba(0,0,0,0.8));
-        opacity: 0;
+        padding: 24px;
+        background: linear-gradient(transparent, rgba(0,0,0,0.85));
+        opacity: 1;
         transition: opacity 0.3s ease;
         pointer-events: none;
       }
       
-      .galeria-item:hover .overlay {
-        opacity: 1;
-      }
-      
       .galeria-item .overlay h3 {
-        font-size: 1rem;
-        font-weight: 400;
-        color: #ffffff;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Manrope', sans-serif;
+        font-weight: 300;
+        font-size: 1.4rem;
         letter-spacing: 1px;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        color: #f5f3f0;
+        text-shadow: 0 2px 12px rgba(0,0,0,0.8);
       }
       
       /* Mensaje si no hay fotos */
       .sin-fotos {
         text-align: center;
         padding: 60px 20px;
-        color: #666;
-        border: 2px dashed #333;
+        color: #8a8580;
+        border: 2px dashed #2a2a2a;
         border-radius: 16px;
         grid-column: 1 / -1;
+        font-family: 'Manrope', sans-serif;
+        font-weight: 300;
       }
       
       .sin-fotos span {
         font-size: 3rem;
         display: block;
         margin-bottom: 16px;
+        color: #8a8580;
+      }
+      
+      .sin-fotos code {
+        font-family: 'Manrope', sans-serif;
+        font-weight: 400;
+        background: #1a1a1a;
+        padding: 2px 8px;
+        border-radius: 4px;
+        color: #b5aea6;
       }
 
       /* ========================================== */
-      /* 🔘 BOTÓN DEL CALENDARIO - VERSIÓN VISIBLE */
+      /* 🔘 BOTÓN DEL CALENDARIO CON MANROPE      */
       /* ========================================== */
       .btn-calendar-float {
         position: fixed;
         top: 24px;
         right: 24px;
-        background: #3b82f6;
-        border: none;
+        background: #2a2a2a;
+        border: 1px solid #3a3a3a;
         border-radius: 50px;
         padding: 14px 28px 14px 24px;
         display: flex;
         align-items: center;
         gap: 12px;
-        color: #ffffff;
+        color: #f5f3f0;
+        font-family: 'Manrope', sans-serif;
+        font-weight: 500;
         font-size: 1rem;
-        font-weight: 600;
+        letter-spacing: 0.5px;
         text-decoration: none;
         cursor: pointer;
         transition: all 0.3s ease;
         z-index: 9999;
-        box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.5);
       }
 
       .btn-calendar-float i {
         font-size: 1.4rem;
-        color: #ffffff;
+        color: #d5d0ca;
         transition: transform 0.3s ease;
       }
 
       .btn-calendar-float:hover {
-        background: #2563eb;
+        background: #3a3a3a;
+        border-color: #5a5a5a;
         transform: scale(1.05) translateY(-2px);
-        box-shadow: 0 8px 30px rgba(59, 130, 246, 0.6);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.6);
       }
 
       .btn-calendar-float:hover i {
         transform: rotate(10deg) scale(1.1);
+        color: #f5f3f0;
       }
 
       .btn-calendar-float:active {
@@ -181,6 +233,18 @@
           font-size: 1.3rem;
           margin: 0;
         }
+        
+        h1 {
+          font-size: 2.5rem;
+        }
+        
+        .subtitulo {
+          font-size: 1rem;
+        }
+        
+        .galeria-item .overlay h3 {
+          font-size: 1.1rem;
+        }
       }
     </style>
   </head>
@@ -201,15 +265,11 @@
       <p class="subtitulo">Photography · Video · Music Production</p>
 
       <div class="galeria">
-        <!-- 
-          📌 CADA IMAGEN LLEVA A UNA SECCIÓN DEL SITIO
-        -->
-        
         <div class="galeria-item">
           <a href="/galeria-fotos" style="display: block; width: 100%; height: 100%; text-decoration: none;">
             <img src="/foto1.jpg" alt="Galería de Fotografía" />
             <div class="overlay">
-              <h3>📸 Photography</h3>
+              <h3>Photography</h3>
             </div>
           </a>
         </div>
@@ -218,7 +278,7 @@
           <a href="/galeria-videos" style="display: block; width: 100%; height: 100%; text-decoration: none;">
             <img src="/foto2.jpg" alt="Galería de Videos" />
             <div class="overlay">
-              <h3>🎬 Professional Video</h3>
+              <h3>Professional Video</h3>
             </div>
           </a>
         </div>
@@ -227,7 +287,7 @@
           <a href="/galeria-audio" style="display: block; width: 100%; height: 100%; text-decoration: none;">
             <img src="/foto3.jpg" alt="Galería de Audio" />
             <div class="overlay">
-              <h3>🎵 For Musicians/Pro audio and video</h3>
+              <h3>For Musicians · Pro Audio & Video</h3>
             </div>
           </a>
         </div>
@@ -237,7 +297,7 @@
       <div class="sin-fotos" id="mensaje-ayuda">
         <span>🖼️</span>
         <p>Agrega tus fotos en la carpeta <code>public/</code> y actualiza el código con los nombres de los archivos.</p>
-        <p style="margin-top: 10px; font-size: 0.9rem; color: #444;">
+        <p style="margin-top: 10px; font-size: 0.9rem; color: #6a6560;">
           Edita este archivo en <code>src/pages/index.astro</code>
         </p>
       </div>
@@ -257,13 +317,13 @@
     <!-- ============================================ -->
     <!-- 💬 WIDGET DE CHAT - REFLECTIONS AUDIO VISUAL -->
     <!-- ============================================ -->
-    <div id="chat-widget" style="position:fixed; bottom:20px; right:20px; z-index:9999; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    <div id="chat-widget" style="position:fixed; bottom:20px; right:20px; z-index:9999; font-family:'Manrope', sans-serif;">
       
       <!-- Botón para abrir/cerrar -->
       <button id="chat-toggle" style="
         background: #1a1a1a; 
-        color: white; 
-        border: none; 
+        color: #ece8e4; 
+        border: 1px solid #2a2a2a;
         border-radius: 50%;
         width: 60px; 
         height: 60px; 
@@ -283,36 +343,43 @@
         right: 0;
         width: 380px; 
         height: 520px; 
-        background: white; 
+        background: #141414; 
         border-radius: 16px;
-        box-shadow: 0 8px 40px rgba(0,0,0,0.25); 
+        border: 1px solid #2a2a2a;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.5); 
         overflow: hidden;
         flex-direction: column;
+        font-family: 'Manrope', sans-serif;
       ">
         <!-- Header -->
         <div style="
           background: #1a1a1a; 
-          color: white; 
+          color: #f5f3f0; 
           padding: 16px 20px; 
-          font-weight: 600;
+          font-weight: 400;
           display: flex;
           align-items: center;
           gap: 10px;
+          font-family: 'Manrope', sans-serif;
+          border-bottom: 1px solid #2a2a2a;
         ">
           <span style="font-size: 20px;">📸</span>
           <div>
-            <div style="font-size: 16px;">Asistente de Reflections</div>
-            <div style="font-size: 12px; opacity: 0.7;">¡Pregúntame lo que necesites!</div>
+            <div style="font-size: 16px; font-weight: 500; letter-spacing: 0.5px;">Asistente de Reflections</div>
+            <div style="font-size: 12px; opacity: 0.6; font-weight: 200; font-style: italic; color: #d5d0ca;">Pregúntame lo que necesites</div>
           </div>
           <button id="chat-close" style="
             margin-left: auto;
             background: none;
             border: none;
-            color: white;
+            color: #d5d0ca;
             font-size: 20px;
             cursor: pointer;
-            opacity: 0.7;
-          ">✕</button>
+            transition: color 0.3s;
+          "
+          onmouseover="this.style.color='#f5f3f0'"
+          onmouseout="this.style.color='#d5d0ca'"
+          >✕</button>
         </div>
         
         <!-- Área de mensajes -->
@@ -320,49 +387,59 @@
           flex: 1; 
           padding: 16px; 
           overflow-y: auto; 
-          background: #faf8f5;
+          background: #0a0a0a;
+          font-family: 'Manrope', sans-serif;
+          font-weight: 300;
         ">
-          <div style="text-align: center; color: #999; font-size: 14px; padding: 20px 0;">
-            👋 ¡Hola! Soy el asistente de Reflections Audio Visual<br>
-            ¿En qué puedo ayudarte hoy?
+          <div style="text-align: center; color: #8a8580; font-size: 14px; padding: 20px 0; font-style: italic;">
+            Hola, soy el asistente de Reflections Audio Visual<br>
+            ¿En qué puedo ayudarte?
           </div>
         </div>
         
         <!-- Input -->
         <div style="
           display: flex; 
-          border-top: 1px solid #eee; 
+          border-top: 1px solid #2a2a2a; 
           padding: 12px 16px; 
           gap: 8px;
-          background: white;
+          background: #0a0a0a;
         ">
           <input 
             id="chat-input" 
             type="text" 
-            placeholder="Escribe tu mensaje aquí..." 
+            placeholder="Escribe tu mensaje..." 
             style="
               flex: 1; 
               padding: 10px 14px; 
-              border: 1px solid #ddd; 
+              border: 1px solid #2a2a2a; 
               border-radius: 8px; 
               outline: none;
               font-size: 14px;
+              font-family: 'Manrope', sans-serif;
+              font-weight: 300;
+              background: #1a1a1a;
+              color: #ece8e4;
               transition: border 0.3s;
             "
-            onfocus="this.style.borderColor='#1a1a1a'"
-            onblur="this.style.borderColor='#ddd'"
+            onfocus="this.style.borderColor='#4a4a4a'"
+            onblur="this.style.borderColor='#2a2a2a'"
           >
           <button id="chat-send" style="
-            background: #1a1a1a; 
-            color: white; 
-            border: none; 
+            background: #2a2a2a; 
+            color: #f5f3f0; 
+            border: 1px solid #3a3a3a;
             padding: 10px 20px; 
             border-radius: 8px; 
             cursor: pointer;
             font-size: 14px;
             font-weight: 500;
-            transition: background 0.3s;
-          ">
+            font-family: 'Manrope', sans-serif;
+            transition: all 0.3s;
+          "
+          onmouseover="this.style.background='#3a3a3a'; this.style.borderColor='#5a5a5a'"
+          onmouseout="this.style.background='#2a2a2a'; this.style.borderColor='#3a3a3a'"
+          >
             Enviar
           </button>
         </div>
@@ -397,7 +474,7 @@
         // Agregar mensaje del usuario
         const userMsg = document.createElement('div');
         userMsg.style.cssText = 'text-align: right; margin: 8px 0;';
-        userMsg.innerHTML = `<span style="background: #1a1a1a; color: white; padding: 10px 14px; border-radius: 16px; display: inline-block; max-width: 80%; font-size: 14px;">${text}</span>`;
+        userMsg.innerHTML = `<span style="background: #2a2a2a; color: #f5f3f0; padding: 10px 14px; border-radius: 16px; display: inline-block; max-width: 80%; font-size: 14px; font-family: 'Manrope', sans-serif; font-weight: 300;">${text}</span>`;
         messagesDiv.appendChild(userMsg);
         
         input.value = '';
@@ -405,8 +482,8 @@
 
         // Indicador de "escribiendo..."
         const typing = document.createElement('div');
-        typing.style.cssText = 'margin: 8px 0; color: #999; font-size: 14px;';
-        typing.textContent = '✍️ Escribiendo...';
+        typing.style.cssText = 'margin: 8px 0; color: #8a8580; font-size: 14px; font-style: italic; font-family: "Manrope", sans-serif; font-weight: 200;';
+        typing.textContent = 'Escribiendo...';
         messagesDiv.appendChild(typing);
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
@@ -433,7 +510,7 @@
           
           const assistantMsg = document.createElement('div');
           assistantMsg.style.cssText = 'text-align: left; margin: 8px 0;';
-          assistantMsg.innerHTML = `<span style="background: #e8e0d8; color: #1a1a1a; padding: 10px 14px; border-radius: 16px; display: inline-block; max-width: 80%; font-size: 14px;"></span>`;
+          assistantMsg.innerHTML = `<span style="background: #1a1a1a; color: #ece8e4; padding: 10px 14px; border-radius: 16px; display: inline-block; max-width: 80%; font-size: 14px; font-family: 'Manrope', sans-serif; font-weight: 300; border: 1px solid #2a2a2a;"></span>`;
           messagesDiv.appendChild(assistantMsg);
           
           while (true) {
@@ -463,8 +540,8 @@
         } catch (error) {
           messagesDiv.removeChild(typing);
           const errorMsg = document.createElement('div');
-          errorMsg.style.cssText = 'text-align: center; color: #e74c3c; font-size: 13px; margin: 8px 0;';
-          errorMsg.textContent = '❌ Lo siento, hubo un error. Por favor, intenta de nuevo.';
+          errorMsg.style.cssText = 'text-align: center; color: #8a6560; font-size: 13px; margin: 8px 0; font-family: "Manrope", sans-serif; font-weight: 300;';
+          errorMsg.textContent = 'Lo siento, hubo un error. Por favor, intenta de nuevo.';
           messagesDiv.appendChild(errorMsg);
         }
         messagesDiv.scrollTop = messagesDiv.scrollHeight;

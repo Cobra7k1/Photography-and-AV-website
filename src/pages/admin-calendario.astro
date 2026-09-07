@@ -1,500 +1,752 @@
 ---
-// src/components/AdminCalendar.astro
+// src/pages/admin-calendario.astro
 import disponibilidadData from '../data/disponibilidad.json';
 ---
 
-<div id="admin-calendar-root" data-fechas='{JSON.stringify(disponibilidadData.fechas)}'></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - Calendar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    
+    <!-- ========================================== -->
+    <!-- 🔤 FONT MANROPE - IMPORTED FROM GOOGLE    -->
+    <!-- ========================================== -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-<style>
-  .admin-calendar-wrapper {
-    background: #1a1a1a;
-    border-radius: 16px;
-    padding: 24px 20px;
-    border: 1px solid #333;
-  }
-
-  .admin-calendar-wrapper h2 {
-    font-weight: 300;
-    font-size: 1.3rem;
-    margin-bottom: 4px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .admin-calendar-wrapper .subtitle {
-    color: #666;
-    font-size: 0.9rem;
-    margin-bottom: 20px;
-  }
-
-  .admin-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 500px;
-    margin: 0 auto 16px;
-    padding: 0 4px;
-  }
-
-  .admin-nav button {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid #333;
-    border-radius: 8px;
-    color: white;
-    padding: 8px 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 0.9rem;
-  }
-
-  .admin-nav button:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: #f59e0b;
-  }
-
-  .admin-nav .month-year {
-    color: #aaa;
-    font-size: 1.1rem;
-    font-weight: 300;
-    min-width: 160px;
-    text-align: center;
-  }
-
-  .admin-grid-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .admin-calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
-    max-width: 500px;
-    margin: 0 auto;
-  }
-
-  .admin-calendar-grid .day-header {
-    color: #666;
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 10px 4px;
-    text-align: center;
-  }
-
-  .admin-calendar-grid .day-cell {
-    aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.95rem;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-    padding: 4px;
-    cursor: pointer;
-    border: 2px solid transparent;
-  }
-
-  .admin-calendar-grid .day-cell.available {
-    color: #4ade80;
-    background: rgba(74, 222, 128, 0.15);
-    border-color: #4ade80;
-  }
-
-  .admin-calendar-grid .day-cell.available:hover {
-    background: rgba(74, 222, 128, 0.3);
-    transform: scale(1.05);
-  }
-
-  .admin-calendar-grid .day-cell.partial {
-    color: #fbbf24;
-    background: rgba(251, 191, 36, 0.15);
-    border-color: #fbbf24;
-  }
-
-  .admin-calendar-grid .day-cell.partial:hover {
-    background: rgba(251, 191, 36, 0.3);
-    transform: scale(1.05);
-  }
-
-  .admin-calendar-grid .day-cell.unavailable {
-    color: #f87171;
-    background: rgba(248, 113, 113, 0.15);
-    border-color: #f87171;
-  }
-
-  .admin-calendar-grid .day-cell.unavailable:hover {
-    background: rgba(248, 113, 113, 0.3);
-    transform: scale(1.05);
-  }
-
-  .admin-calendar-grid .day-cell.past {
-    color: #333;
-    cursor: not-allowed;
-    opacity: 0.3;
-    border-color: #222;
-  }
-
-  .admin-calendar-grid .day-cell.empty {
-    color: #222;
-    cursor: default;
-    border-color: transparent;
-  }
-
-  .admin-legend {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 10px;
-  }
-
-  .admin-legend-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: #0a0a0a;
-    padding: 12px 16px;
-    border-radius: 8px;
-    border-left: 4px solid #333;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .admin-legend-item:hover {
-    background: #1a1a1a;
-  }
-
-  .admin-legend-item .legend-color {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: inline-block;
-    border: 1px solid rgba(255,255,255,0.1);
-  }
-
-  .admin-legend-item .legend-color.green { background: #4ade80; }
-  .admin-legend-item .legend-color.yellow { background: #fbbf24; }
-  .admin-legend-item .legend-color.red { background: #f87171; }
-  .admin-legend-item .legend-color.gray { background: #333; }
-
-  .admin-legend-item .legend-label {
-    color: #aaa;
-    font-size: 0.95rem;
-    flex: 1;
-  }
-
-  .admin-legend-item .legend-label strong { color: #fff; font-weight: 500; }
-
-  .save-status {
-    text-align: center;
-    margin-top: 16px;
-    font-size: 0.85rem;
-    color: #666;
-    min-height: 24px;
-  }
-
-  .save-status.saving { color: #fbbf24; }
-  .save-status.saved { color: #4ade80; }
-  .save-status.error { color: #f87171; }
-
-  @media (max-width: 768px) {
-    .admin-grid-container { grid-template-columns: 1fr; }
-    .admin-calendar-grid .day-cell { font-size: 0.8rem; }
-    .admin-calendar-grid { gap: 2px; max-width: 100%; }
-  }
-
-  @media (max-width: 640px) {
-    .admin-calendar-wrapper { padding: 16px 12px; }
-    .admin-nav .month-year { font-size: 0.9rem; min-width: 120px; }
-    .admin-nav button { padding: 6px 12px; font-size: 0.8rem; }
-    .admin-calendar-grid .day-cell { font-size: 0.75rem; }
-    .admin-legend-item { padding: 8px 12px; }
-    .admin-legend-item .legend-label { font-size: 0.85rem; }
-  }
-</style>
-
-<script>
-  (function() {
-    const root = document.getElementById('admin-calendar-root');
-    if (!root) {
-      console.error('AdminCalendar: root element not found');
-      return;
-    }
-
-    let fechasIniciales = {};
-    try {
-      fechasIniciales = JSON.parse(root.dataset.fechas || '{}');
-    } catch (e) {
-      console.error('Error parsing fechas:', e);
-      fechasIniciales = {};
-    }
-
-    const hoy = new Date();
-    const currentYear = hoy.getFullYear();
-    const currentMonth = hoy.getMonth();
-    const currentDay = hoy.getDate();
-
-    const maxMonthGlobal = currentMonth + 6;
-    const maxYearGlobal = currentYear + Math.floor(maxMonthGlobal / 12);
-    const maxMonthFinal = maxMonthGlobal % 12;
-
-    let viewYear = currentYear;
-    let viewMonth = currentMonth;
-    let fechas = { ...fechasIniciales };
-    let isSaving = false;
-    let selectedDate = null;
-
-    const wrapper = document.createElement('div');
-    wrapper.className = 'admin-calendar-wrapper';
-
-    wrapper.innerHTML = `
-      <h2><i class="fas fa-calendar-edit" style="color: #f59e0b;"></i> Gestión de fechas</h2>
-      <p class="subtitle">Haz clic en una fecha para cambiar su estado</p>
-
-      <div class="admin-nav">
-        <button id="adminPrevMonth">‹</button>
-        <span class="month-year" id="adminMonthYear">Agosto 2026</span>
-        <button id="adminNextMonth">›</button>
-      </div>
-
-      <div class="admin-grid-container">
-        <div>
-          <div class="admin-calendar-grid" id="adminCalendarGrid">
-            <div class="day-header">Lun</div>
-            <div class="day-header">Mar</div>
-            <div class="day-header">Mié</div>
-            <div class="day-header">Jue</div>
-            <div class="day-header">Vie</div>
-            <div class="day-header">Sáb</div>
-            <div class="day-header">Dom</div>
-          </div>
-          <div class="save-status" id="saveStatus">💾 Los cambios se guardan automáticamente</div>
-        </div>
-
-        <div>
-          <h3 style="font-weight: 300; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; color: #aaa;">
-            <i class="fas fa-palette" style="color: #f59e0b;"></i>
-            Estados de disponibilidad
-          </h3>
-          <div class="admin-legend">
-            <div class="admin-legend-item" data-estado="available">
-              <span class="legend-color green"></span>
-              <span class="legend-label"><strong style="color: #4ade80;">Disponible</strong> — Fecha libre</span>
-              <span style="color: #4ade80; font-size: 1.2rem;">✅</span>
-            </div>
-            <div class="admin-legend-item" data-estado="partial">
-              <span class="legend-color yellow"></span>
-              <span class="legend-label"><strong style="color: #fbbf24;">Parcial</strong> — Horario limitado</span>
-              <span style="color: #fbbf24; font-size: 1.2rem;">🟡</span>
-            </div>
-            <div class="admin-legend-item" data-estado="unavailable">
-              <span class="legend-color red"></span>
-              <span class="legend-label"><strong style="color: #f87171;">No disponible</strong> — Ocupado</span>
-              <span style="color: #f87171; font-size: 1.2rem;">❌</span>
-            </div>
-            <div class="admin-legend-item" data-estado="clear" style="border-left-color: #333;">
-              <span class="legend-color gray"></span>
-              <span class="legend-label"><strong style="color: #888;">Limpiar</strong> — Quitar estado</span>
-              <span style="color: #888; font-size: 1.2rem;">↩️</span>
-            </div>
-          </div>
-          <div style="margin-top: 16px; padding: 12px 16px; background: #0a0a0a; border-radius: 8px; border: 1px solid #222;">
-            <p style="color: #666; font-size: 0.85rem;">
-              <i class="fas fa-info-circle" style="color: #3b82f6;"></i>
-              Selecciona una fecha en el calendario y luego elige un estado.
-            </p>
-            <p id="selectedDateDisplay" style="color: #888; font-size: 0.9rem; margin-top: 8px;">
-              📅 Ninguna fecha seleccionada
-            </p>
-          </div>
-        </div>
-      </div>
-    `;
-
-    root.replaceWith(wrapper);
-
-    function getEstadoFecha(year, month, day) {
-      const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-      return fechas[key] || 'available';
-    }
-
-    async function guardarCambios() {
-      if (isSaving) return;
-      isSaving = true;
-
-      const saveStatus = document.getElementById('saveStatus');
-      saveStatus.textContent = '⏳ Guardando cambios...';
-      saveStatus.className = 'save-status saving';
-
-      try {
-        const response = await fetch('/api/guardar-disponibilidad', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fechas })
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          fechas = data.fechas;
-          saveStatus.textContent = '✅ ¡Cambios guardados!';
-          saveStatus.className = 'save-status saved';
-          setTimeout(() => {
-            saveStatus.textContent = '💾 Los cambios se guardan automáticamente';
-            saveStatus.className = 'save-status';
-          }, 3000);
-        } else {
-          throw new Error('Error al guardar');
+        body {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 300;
+            background: #0a0a0a;
+            color: #ece8e4;
+            min-height: 100vh;
+            padding: 40px 20px;
         }
-      } catch (error) {
-        saveStatus.textContent = '❌ Error al guardar. Reintentando...';
-        saveStatus.className = 'save-status error';
-        setTimeout(() => guardarCambios(), 3000);
-      }
 
-      isSaving = false;
-    }
+        .container { max-width: 1200px; margin: 0 auto; }
 
-    function setEstadoFecha(year, month, day, estado) {
-      const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-      if (estado === 'clear') {
-        delete fechas[key];
-      } else {
-        fechas[key] = estado;
-      }
-      renderCalendar(viewYear, viewMonth);
-      guardarCambios();
-    }
+        .header-admin {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #2a2a2a;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
 
-    function renderCalendar(year, month) {
-      const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
-                     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        .header-admin h1 {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 200;
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+            color: #f5f3f0;
+        }
 
-      document.getElementById('adminMonthYear').textContent = `${months[month]} ${year}`;
+        .header-admin h1 i { color: #f59e0b; margin-right: 12px; }
 
-      const grid = document.getElementById('adminCalendarGrid');
-      const headers = grid.querySelectorAll('.day-header');
-      grid.innerHTML = '';
-      headers.forEach(h => grid.appendChild(h));
+        .badge-admin {
+            background: #1a3a2a;
+            color: #4ade80;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 400;
+            font-size: 0.85rem;
+            border: 1px solid #2a5a3a;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-      const firstDay = new Date(year, month, 1).getDay();
-      let startOffset = (firstDay === 0) ? 6 : firstDay - 1;
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
 
-      for (let i = 0; i < startOffset; i++) {
-        const empty = document.createElement('div');
-        empty.className = 'day-cell empty';
-        grid.appendChild(empty);
-      }
+        .btn-back {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #2a2a2a;
+            border-radius: 40px;
+            padding: 10px 24px;
+            color: #f5f3f0;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 400;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-      for (let day = 1; day <= daysInMonth; day++) {
-        const cell = document.createElement('div');
-        cell.className = 'day-cell';
-        cell.textContent = day;
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #f59e0b;
+            transform: translateX(-3px);
+        }
 
-        const dateObj = new Date(year, month, day);
-        const isPast = dateObj < new Date(currentYear, currentMonth, currentDay);
-        const isBeyond = (year > maxYearGlobal) || (year === maxYearGlobal && month > maxMonthFinal);
+        .info-box {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
 
-        if (isPast || isBeyond) {
-          cell.classList.add('past');
-        } else {
-          const estado = getEstadoFecha(year, month, day);
-          cell.classList.add(estado);
-          cell.dataset.year = year;
-          cell.dataset.month = month;
-          cell.dataset.day = day;
+        .info-box i { font-size: 1.5rem; color: #f59e0b; }
+        .info-box p {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 300;
+            color: #b5aea6;
+            font-size: 0.95rem;
+            flex: 1;
+        }
+        .info-box .highlight { color: #f5f3f0; font-weight: 400; }
 
-          cell.addEventListener('click', () => {
-            document.querySelectorAll('.admin-calendar-grid .day-cell.selected').forEach(el => {
-              el.style.outline = 'none';
-              el.style.boxShadow = 'none';
-              el.classList.remove('selected');
+        .admin-calendar-wrapper {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 30px 24px;
+            border: 1px solid #2a2a2a;
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .admin-calendar-wrapper h2 {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 300;
+            font-size: 1.3rem;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #f5f3f0;
+        }
+
+        .admin-calendar-wrapper h2 i { color: #f59e0b; }
+
+        .admin-calendar-wrapper .subtitle {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 200;
+            color: #6a6560;
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+
+        .admin-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 500px;
+            margin: 0 auto 20px;
+            padding: 0 4px;
+        }
+
+        .admin-nav button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            color: #ece8e4;
+            padding: 8px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 400;
+            font-size: 1rem;
+        }
+
+        .admin-nav button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #f59e0b;
+            color: #f5f3f0;
+        }
+
+        .admin-nav .month-year {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 300;
+            color: #ece8e4;
+            font-size: 1.1rem;
+            min-width: 160px;
+            text-align: center;
+        }
+
+        .admin-grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .admin-calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .admin-calendar-grid .day-header {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 400;
+            color: #6a6560;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 10px 4px;
+            text-align: center;
+        }
+
+        .admin-calendar-grid .day-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 300;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            padding: 4px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .admin-calendar-grid .day-cell:hover { transform: scale(1.05); }
+
+        .admin-calendar-grid .day-cell.available {
+            color: #4ade80;
+            background: rgba(74, 222, 128, 0.12);
+            border-color: #4ade80;
+        }
+
+        .admin-calendar-grid .day-cell.available:hover { background: rgba(74, 222, 128, 0.25); }
+
+        .admin-calendar-grid .day-cell.partial {
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.12);
+            border-color: #fbbf24;
+        }
+
+        .admin-calendar-grid .day-cell.partial:hover { background: rgba(251, 191, 36, 0.25); }
+
+        .admin-calendar-grid .day-cell.unavailable {
+            color: #f87171;
+            background: rgba(248, 113, 113, 0.12);
+            border-color: #f87171;
+        }
+
+        .admin-calendar-grid .day-cell.unavailable:hover { background: rgba(248, 113, 113, 0.25); }
+
+        .admin-calendar-grid .day-cell.past {
+            color: #2a2a2a;
+            cursor: not-allowed;
+            opacity: 0.3;
+            border-color: #1a1a1a;
+            background: transparent;
+        }
+
+        .admin-calendar-grid .day-cell.past:hover { transform: none; }
+
+        .admin-calendar-grid .day-cell.empty {
+            color: #1a1a1a;
+            cursor: default;
+            border-color: transparent;
+            background: transparent;
+        }
+
+        .admin-calendar-grid .day-cell.selected {
+            outline: 3px solid #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            transform: scale(1.05);
+            z-index: 1;
+        }
+
+        .admin-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .admin-legend-title {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 300;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #b5aea6;
+        }
+
+        .admin-legend-title i { color: #f59e0b; }
+
+        .admin-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #0a0a0a;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border-left: 4px solid #2a2a2a;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .admin-legend-item:hover {
+            background: #141414;
+            transform: translateX(4px);
+        }
+
+        .admin-legend-item .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
+        }
+
+        .admin-legend-item .legend-color.green { background: #4ade80; }
+        .admin-legend-item .legend-color.yellow { background: #fbbf24; }
+        .admin-legend-item .legend-color.red { background: #f87171; }
+        .admin-legend-item .legend-color.gray { background: #444; }
+
+        .admin-legend-item .legend-label {
+            color: #b5aea6;
+            font-size: 0.9rem;
+            flex: 1;
+            font-weight: 300;
+        }
+
+        .admin-legend-item .legend-label strong {
+            color: #f5f3f0;
+            font-weight: 400;
+        }
+
+        .admin-legend-item .legend-icon { font-size: 1.2rem; }
+        .admin-legend-item .legend-icon.green { color: #4ade80; }
+        .admin-legend-item .legend-icon.yellow { color: #fbbf24; }
+        .admin-legend-item .legend-icon.red { color: #f87171; }
+        .admin-legend-item .legend-icon.gray { color: #666; }
+
+        .selected-date-box {
+            margin-top: 16px;
+            padding: 14px 16px;
+            background: #0a0a0a;
+            border-radius: 8px;
+            border: 1px solid #2a2a2a;
+        }
+
+        .selected-date-box p {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 300;
+            color: #6a6560;
+            font-size: 0.85rem;
+        }
+
+        .selected-date-box p i { color: #3b82f6; }
+
+        .selected-date-box #selectedDateDisplay {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 300;
+            color: #b5aea6;
+            font-size: 0.9rem;
+            margin-top: 6px;
+        }
+
+        .selected-date-box #selectedDateDisplay strong {
+            color: #f5f3f0;
+            font-weight: 400;
+        }
+
+        .save-status {
+            text-align: center;
+            margin-top: 16px;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 300;
+            font-size: 0.85rem;
+            color: #6a6560;
+            min-height: 24px;
+        }
+
+        .save-status.saving { color: #fbbf24; }
+        .save-status.saved { color: #4ade80; }
+        .save-status.error { color: #f87171; }
+
+        @media (max-width: 768px) {
+            .admin-grid-container { grid-template-columns: 1fr; gap: 20px; }
+            .admin-calendar-grid { max-width: 100%; }
+            .admin-calendar-grid .day-cell { font-size: 0.85rem; }
+            .admin-calendar-grid { gap: 4px; }
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 20px 12px; }
+            .header-admin { flex-direction: column; align-items: flex-start; }
+            .header-admin h1 { font-size: 1.5rem; }
+            .btn-back { width: 100%; justify-content: center; }
+            .header-actions { width: 100%; }
+            .badge-admin { width: 100%; justify-content: center; }
+            .info-box { padding: 16px; }
+            .info-box p { font-size: 0.85rem; }
+            .admin-calendar-wrapper { padding: 16px 12px; }
+            .admin-nav .month-year { font-size: 0.9rem; min-width: 120px; }
+            .admin-nav button { padding: 6px 14px; font-size: 0.8rem; }
+            .admin-calendar-grid .day-cell { font-size: 0.75rem; border-radius: 4px; }
+            .admin-calendar-grid { gap: 2px; }
+            .admin-legend-item { padding: 8px 12px; }
+            .admin-legend-item .legend-label { font-size: 0.8rem; }
+            .admin-legend-item .legend-color { width: 16px; height: 16px; }
+            .selected-date-box { padding: 10px 12px; }
+            .selected-date-box #selectedDateDisplay { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-admin">
+            <h1><i class="fas fa-tools"></i> Admin Panel</h1>
+            <div class="header-actions">
+                <span class="badge-admin"><i class="fas fa-check-circle"></i> Admin Mode</span>
+                <a href="/calendario" class="btn-back"><i class="fas fa-eye"></i> View Public Calendar</a>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <i class="fas fa-info-circle"></i>
+            <p><span class="highlight">🗓️ Manage your availability</span> — Click on a date, then choose a status from the panel on the right.</p>
+        </div>
+
+        <div id="admin-calendar-root" class="admin-calendar-wrapper" 
+             data-fechas='{JSON.stringify(disponibilidadData.fechas)}'>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const root = document.getElementById('admin-calendar-root');
+            if (!root) {
+                console.error('AdminCalendar: root element not found');
+                return;
+            }
+
+            let fechasIniciales = {};
+            try {
+                fechasIniciales = JSON.parse(root.dataset.fechas || '{}');
+            } catch (e) {
+                console.error('Error parsing fechas:', e);
+                fechasIniciales = {};
+            }
+
+            const hoy = new Date();
+            const currentYear = hoy.getFullYear();
+            const currentMonth = hoy.getMonth();
+            const currentDay = hoy.getDate();
+
+            const maxMonthGlobal = currentMonth + 6;
+            const maxYearGlobal = currentYear + Math.floor(maxMonthGlobal / 12);
+            const maxMonthFinal = maxMonthGlobal % 12;
+
+            let viewYear = currentYear;
+            let viewMonth = currentMonth;
+            let fechas = { ...fechasIniciales };
+            let isSaving = false;
+            let selectedDate = null;
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'admin-calendar-wrapper';
+            wrapper.style.cssText = `
+                background: #1a1a1a;
+                border-radius: 16px;
+                padding: 30px 24px;
+                border: 1px solid #2a2a2a;
+                font-family: 'Manrope', sans-serif;
+            `;
+
+            wrapper.innerHTML = `
+                <h2 style="font-family: 'Manrope', sans-serif; font-weight: 300; font-size: 1.3rem; margin-bottom: 4px; display: flex; align-items: center; gap: 10px; color: #f5f3f0;">
+                    <i class="fas fa-calendar-edit" style="color: #f59e0b;"></i> Manage Dates
+                </h2>
+                <p style="font-family: 'Manrope', sans-serif; font-weight: 200; color: #6a6560; font-size: 0.9rem; margin-bottom: 24px; font-style: italic;">Click on a date to select it, then choose a status from the panel</p>
+
+                <div class="admin-nav" style="display: flex; justify-content: space-between; align-items: center; max-width: 500px; margin: 0 auto 20px; padding: 0 4px;">
+                    <button id="adminPrevMonth" style="background: rgba(255,255,255,0.05); border: 1px solid #2a2a2a; border-radius: 8px; color: #ece8e4; padding: 8px 20px; cursor: pointer; transition: all 0.3s ease; font-family: 'Manrope', sans-serif; font-weight: 400; font-size: 1rem;">‹</button>
+                    <span class="month-year" id="adminMonthYear" style="font-family: 'Manrope', sans-serif; font-weight: 300; color: #ece8e4; font-size: 1.1rem; min-width: 160px; text-align: center;">September 2026</span>
+                    <button id="adminNextMonth" style="background: rgba(255,255,255,0.05); border: 1px solid #2a2a2a; border-radius: 8px; color: #ece8e4; padding: 8px 20px; cursor: pointer; transition: all 0.3s ease; font-family: 'Manrope', sans-serif; font-weight: 400; font-size: 1rem;">›</button>
+                </div>
+
+                <div class="admin-grid-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 900px; margin: 0 auto;">
+                    <div>
+                        <div class="admin-calendar-grid" id="adminCalendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; max-width: 500px; margin: 0 auto;">
+                            <div class="day-header" style="font-family: 'Manrope', sans-serif; font-weight: 400; color: #6a6560; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 4px; text-align: center;">Mon</div>
+                            <div class="day-header" style="font-family: 'Manrope', sans-serif; font-weight: 400; color: #6a6560; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 4px; text-align: center;">Tue</div>
+                            <div class="day-header" style="font-family: 'Manrope', sans-serif; font-weight: 400; color: #6a6560; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 4px; text-align: center;">Wed</div>
+                            <div class="day-header" style="font-family: 'Manrope', sans-serif; font-weight: 400; color: #6a6560; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 4px; text-align: center;">Thu</div>
+                            <div class="day-header" style="font-family: 'Manrope', sans-serif; font-weight: 400; color: #6a6560; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 4px; text-align: center;">Fri</div>
+                            <div class="day-header" style="font-family: 'Manrope', sans-serif; font-weight: 400; color: #6a6560; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 4px; text-align: center;">Sat</div>
+                            <div class="day-header" style="font-family: 'Manrope', sans-serif; font-weight: 400; color: #6a6560; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 4px; text-align: center;">Sun</div>
+                        </div>
+                        <div class="save-status" id="saveStatus" style="text-align: center; margin-top: 16px; font-family: 'Manrope', sans-serif; font-weight: 300; font-size: 0.85rem; color: #6a6560; min-height: 24px;">💾 Changes are saved automatically</div>
+                    </div>
+
+                    <div>
+                        <div class="admin-legend-title" style="font-family: 'Manrope', sans-serif; font-weight: 300; font-size: 1.1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; color: #b5aea6;">
+                            <i class="fas fa-palette" style="color: #f59e0b;"></i> Availability Status
+                        </div>
+                        <div class="admin-legend" style="display: flex; flex-direction: column; gap: 10px; margin-top: 4px;">
+                            <div class="admin-legend-item" data-estado="available" style="display: flex; align-items: center; gap: 12px; background: #0a0a0a; padding: 12px 16px; border-radius: 8px; border-left: 4px solid #2a2a2a; cursor: pointer; transition: all 0.2s ease; font-family: 'Manrope', sans-serif;">
+                                <span class="legend-color green" style="width: 20px; height: 20px; border-radius: 50%; display: inline-block; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; background: #4ade80;"></span>
+                                <span class="legend-label" style="color: #b5aea6; font-size: 0.9rem; flex: 1; font-weight: 300;"><strong style="color: #f5f3f0; font-weight: 400;">Available</strong> — Date is free</span>
+                                <span class="legend-icon green" style="font-size: 1.2rem; color: #4ade80;">✅</span>
+                            </div>
+                            <div class="admin-legend-item" data-estado="partial" style="display: flex; align-items: center; gap: 12px; background: #0a0a0a; padding: 12px 16px; border-radius: 8px; border-left: 4px solid #2a2a2a; cursor: pointer; transition: all 0.2s ease; font-family: 'Manrope', sans-serif;">
+                                <span class="legend-color yellow" style="width: 20px; height: 20px; border-radius: 50%; display: inline-block; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; background: #fbbf24;"></span>
+                                <span class="legend-label" style="color: #b5aea6; font-size: 0.9rem; flex: 1; font-weight: 300;"><strong style="color: #f5f3f0; font-weight: 400;">Partial</strong> — Limited availability</span>
+                                <span class="legend-icon yellow" style="font-size: 1.2rem; color: #fbbf24;">🟡</span>
+                            </div>
+                            <div class="admin-legend-item" data-estado="unavailable" style="display: flex; align-items: center; gap: 12px; background: #0a0a0a; padding: 12px 16px; border-radius: 8px; border-left: 4px solid #2a2a2a; cursor: pointer; transition: all 0.2s ease; font-family: 'Manrope', sans-serif;">
+                                <span class="legend-color red" style="width: 20px; height: 20px; border-radius: 50%; display: inline-block; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; background: #f87171;"></span>
+                                <span class="legend-label" style="color: #b5aea6; font-size: 0.9rem; flex: 1; font-weight: 300;"><strong style="color: #f5f3f0; font-weight: 400;">Not Available</strong> — Fully booked</span>
+                                <span class="legend-icon red" style="font-size: 1.2rem; color: #f87171;">❌</span>
+                            </div>
+                            <div class="admin-legend-item" data-estado="clear" style="display: flex; align-items: center; gap: 12px; background: #0a0a0a; padding: 12px 16px; border-radius: 8px; border-left: 4px solid #444; cursor: pointer; transition: all 0.2s ease; font-family: 'Manrope', sans-serif;">
+                                <span class="legend-color gray" style="width: 20px; height: 20px; border-radius: 50%; display: inline-block; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; background: #444;"></span>
+                                <span class="legend-label" style="color: #b5aea6; font-size: 0.9rem; flex: 1; font-weight: 300;"><strong style="color: #888; font-weight: 400;">Clear</strong> — Remove status</span>
+                                <span class="legend-icon gray" style="font-size: 1.2rem; color: #666;">↩️</span>
+                            </div>
+                        </div>
+                        <div class="selected-date-box" style="margin-top: 16px; padding: 14px 16px; background: #0a0a0a; border-radius: 8px; border: 1px solid #2a2a2a;">
+                            <p style="font-family: 'Manrope', sans-serif; font-weight: 300; color: #6a6560; font-size: 0.85rem;"><i class="fas fa-info-circle" style="color: #3b82f6;"></i> Select a date, then choose a status</p>
+                            <div id="selectedDateDisplay" style="font-family: 'Manrope', sans-serif; font-weight: 300; color: #b5aea6; font-size: 0.9rem; margin-top: 6px;">📅 No date selected</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            root.replaceWith(wrapper);
+
+            function getEstadoFecha(year, month, day) {
+                const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                return fechas[key] || 'available';
+            }
+
+            async function guardarCambios() {
+                if (isSaving) return;
+                isSaving = true;
+
+                const saveStatus = document.getElementById('saveStatus');
+                saveStatus.textContent = '⏳ Saving changes...';
+                saveStatus.className = 'save-status saving';
+
+                try {
+                    const response = await fetch('/api/guardar-disponibilidad', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ fechas })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        fechas = data.fechas;
+                        saveStatus.textContent = '✅ Changes saved!';
+                        saveStatus.className = 'save-status saved';
+                        setTimeout(() => {
+                            saveStatus.textContent = '💾 Changes are saved automatically';
+                            saveStatus.className = 'save-status';
+                        }, 3000);
+                    } else {
+                        throw new Error('Error saving');
+                    }
+                } catch (error) {
+                    saveStatus.textContent = '❌ Error saving. Retrying...';
+                    saveStatus.className = 'save-status error';
+                    setTimeout(() => guardarCambios(), 3000);
+                }
+
+                isSaving = false;
+            }
+
+            function setEstadoFecha(year, month, day, estado) {
+                const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                if (estado === 'clear') {
+                    delete fechas[key];
+                } else {
+                    fechas[key] = estado;
+                }
+                renderCalendar(viewYear, viewMonth);
+                guardarCambios();
+            }
+
+            function renderCalendar(year, month) {
+                const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                               'July', 'August', 'September', 'October', 'November', 'December'];
+
+                document.getElementById('adminMonthYear').textContent = `${months[month]} ${year}`;
+
+                const grid = document.getElementById('adminCalendarGrid');
+                const headers = grid.querySelectorAll('.day-header');
+                grid.innerHTML = '';
+                headers.forEach(h => grid.appendChild(h));
+
+                const firstDay = new Date(year, month, 1).getDay();
+                let startOffset = (firstDay === 0) ? 6 : firstDay - 1;
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+                for (let i = 0; i < startOffset; i++) {
+                    const empty = document.createElement('div');
+                    empty.className = 'day-cell empty';
+                    empty.style.cssText = 'color: #1a1a1a; cursor: default; border-color: transparent; background: transparent;';
+                    grid.appendChild(empty);
+                }
+
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'day-cell';
+                    cell.textContent = day;
+                    cell.style.cssText = `
+                        aspect-ratio: 1;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-family: 'Manrope', sans-serif;
+                        font-weight: 300;
+                        font-size: 0.95rem;
+                        border-radius: 8px;
+                        transition: all 0.2s ease;
+                        padding: 4px;
+                        cursor: pointer;
+                        border: 2px solid transparent;
+                        background: rgba(255, 255, 255, 0.03);
+                    `;
+
+                    const dateObj = new Date(year, month, day);
+                    const isPast = dateObj < new Date(currentYear, currentMonth, currentDay);
+                    const isBeyond = (year > maxYearGlobal) || (year === maxYearGlobal && month > maxMonthFinal);
+
+                    if (isPast || isBeyond) {
+                        cell.classList.add('past');
+                        cell.style.cssText += 'color: #2a2a2a; cursor: not-allowed; opacity: 0.3; border-color: #1a1a1a; background: transparent;';
+                    } else {
+                        const estado = getEstadoFecha(year, month, day);
+                        cell.classList.add(estado);
+                        
+                        if (estado === 'available') {
+                            cell.style.cssText += 'color: #4ade80; background: rgba(74, 222, 128, 0.12); border-color: #4ade80;';
+                        } else if (estado === 'partial') {
+                            cell.style.cssText += 'color: #fbbf24; background: rgba(251, 191, 36, 0.12); border-color: #fbbf24;';
+                        } else if (estado === 'unavailable') {
+                            cell.style.cssText += 'color: #f87171; background: rgba(248, 113, 113, 0.12); border-color: #f87171;';
+                        }
+
+                        cell.dataset.year = year;
+                        cell.dataset.month = month;
+                        cell.dataset.day = day;
+
+                        cell.addEventListener('click', () => {
+                            document.querySelectorAll('.admin-calendar-grid .day-cell.selected').forEach(el => {
+                                el.classList.remove('selected');
+                                el.style.outline = 'none';
+                                el.style.boxShadow = 'none';
+                            });
+
+                            cell.classList.add('selected');
+                            cell.style.outline = '3px solid #3b82f6';
+                            cell.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.3)';
+
+                            selectedDate = { year, month, day };
+                            const monthsLocal = ['January', 'February', 'March', 'April', 'May', 'June', 
+                                                'July', 'August', 'September', 'October', 'November', 'December'];
+                            document.getElementById('selectedDateDisplay').innerHTML = 
+                                `📅 Selected date: <strong style="color: #f5f3f0;">${day} ${monthsLocal[month]}, ${year}</strong>`;
+                        });
+                    }
+
+                    grid.appendChild(cell);
+                }
+            }
+
+            document.querySelectorAll('.admin-legend-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const estado = item.dataset.estado;
+                    if (!selectedDate) {
+                        const saveStatus = document.getElementById('saveStatus');
+                        saveStatus.textContent = '⚠️ Please select a date first';
+                        saveStatus.className = 'save-status error';
+                        setTimeout(() => {
+                            saveStatus.textContent = '💾 Changes are saved automatically';
+                            saveStatus.className = 'save-status';
+                        }, 3000);
+                        return;
+                    }
+
+                    const { year, month, day } = selectedDate;
+                    setEstadoFecha(year, month, day, estado);
+
+                    const estadosMap = {
+                        'available': '✅ Available',
+                        'partial': '🟡 Partial',
+                        'unavailable': '❌ Not Available',
+                        'clear': '↩️ No status (Available)'
+                    };
+                    const monthsLocal = ['January', 'February', 'March', 'April', 'May', 'June', 
+                                        'July', 'August', 'September', 'October', 'November', 'December'];
+                    document.getElementById('selectedDateDisplay').innerHTML = 
+                        `📅 ${day} ${monthsLocal[month]}, ${year} → <strong style="color: #f5f3f0;">${estadosMap[estado]}</strong>`;
+                });
             });
 
-            cell.style.outline = '3px solid #3b82f6';
-            cell.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.3)';
-            cell.classList.add('selected');
+            document.getElementById('adminPrevMonth').addEventListener('click', () => {
+                if (viewMonth === 0) { viewYear--; viewMonth = 11; }
+                else { viewMonth--; }
+                selectedDate = null;
+                document.getElementById('selectedDateDisplay').innerHTML = '📅 No date selected';
+                renderCalendar(viewYear, viewMonth);
+            });
 
-            selectedDate = { year, month, day };
-            const monthsLocal = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
-                                'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-            document.getElementById('selectedDateDisplay').innerHTML = 
-              `📅 Fecha seleccionada: <strong style="color: #fff;">${day} de ${monthsLocal[month]}, ${year}</strong>`;
-          });
-        }
+            document.getElementById('adminNextMonth').addEventListener('click', () => {
+                const nextMonthCheck = viewMonth + 1;
+                const nextYearCheck = viewYear + Math.floor(nextMonthCheck / 12);
+                const nextMonthFinal = nextMonthCheck % 12;
 
-        grid.appendChild(cell);
-      }
-    }
+                if (nextYearCheck > maxYearGlobal || 
+                    (nextYearCheck === maxYearGlobal && nextMonthFinal > maxMonthFinal)) {
+                    const saveStatus = document.getElementById('saveStatus');
+                    saveStatus.textContent = '📅 No more dates available';
+                    saveStatus.className = 'save-status';
+                    setTimeout(() => {
+                        saveStatus.textContent = '💾 Changes are saved automatically';
+                        saveStatus.className = 'save-status';
+                    }, 3000);
+                    return;
+                }
 
-    // Manejadores de estados
-    document.querySelectorAll('.admin-legend-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const estado = item.dataset.estado;
-        if (!selectedDate) {
-          const saveStatus = document.getElementById('saveStatus');
-          saveStatus.textContent = '⚠️ Primero selecciona una fecha en el calendario';
-          saveStatus.className = 'save-status error';
-          setTimeout(() => {
-            saveStatus.textContent = '💾 Los cambios se guardan automáticamente';
-            saveStatus.className = 'save-status';
-          }, 3000);
-          return;
-        }
+                if (viewMonth === 11) { viewYear++; viewMonth = 0; }
+                else { viewMonth++; }
+                selectedDate = null;
+                document.getElementById('selectedDateDisplay').innerHTML = '📅 No date selected';
+                renderCalendar(viewYear, viewMonth);
+            });
 
-        const { year, month, day } = selectedDate;
-        setEstadoFecha(year, month, day, estado);
-
-        const estadosMap = {
-          'available': '✅ Disponible',
-          'partial': '🟡 Parcial',
-          'unavailable': '❌ No disponible',
-          'clear': '↩️ Sin estado (Disponible)'
-        };
-        const monthsLocal = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
-                            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-        document.getElementById('selectedDateDisplay').innerHTML = 
-          `📅 ${day} de ${monthsLocal[month]}, ${year} → <strong style="color: #fff;">${estadosMap[estado]}</strong>`;
-      });
-    });
-
-    document.getElementById('adminPrevMonth').addEventListener('click', () => {
-      if (viewMonth === 0) { viewYear--; viewMonth = 11; }
-      else { viewMonth--; }
-      selectedDate = null;
-      document.getElementById('selectedDateDisplay').innerHTML = '📅 Ninguna fecha seleccionada';
-      renderCalendar(viewYear, viewMonth);
-    });
-
-    document.getElementById('adminNextMonth').addEventListener('click', () => {
-      const nextMonthCheck = viewMonth + 1;
-      const nextYearCheck = viewYear + Math.floor(nextMonthCheck / 12);
-      const nextMonthFinal = nextMonthCheck % 12;
-
-      if (nextYearCheck > maxYearGlobal || 
-          (nextYearCheck === maxYearGlobal && nextMonthFinal > maxMonthFinal)) {
-        const saveStatus = document.getElementById('saveStatus');
-        saveStatus.textContent = '📅 No hay más fechas disponibles';
-        saveStatus.className = 'save-status';
-        setTimeout(() => {
-          saveStatus.textContent = '💾 Los cambios se guardan automáticamente';
-          saveStatus.className = 'save-status';
-        }, 3000);
-        return;
-      }
-
-      if (viewMonth === 11) { viewYear++; viewMonth = 0; }
-      else { viewMonth++; }
-      selectedDate = null;
-      document.getElementById('selectedDateDisplay').innerHTML = '📅 Ninguna fecha seleccionada';
-      renderCalendar(viewYear, viewMonth);
-    });
-
-    renderCalendar(viewYear, viewMonth);
-  })();
-</script>
+            renderCalendar(viewYear, viewMonth);
+        })();
+    </script>
+</body>
+</html>

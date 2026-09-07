@@ -1,50 +1,52 @@
 ---
 // src/pages/calendario.astro
 import ContactForm from '../components/ContactForm.astro';
-import disponibilidadData from '../data/disponibilidad.json';
 ---
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Calendario - Reflections Audio Visual</title>
+    <title>Calendar - Reflections Audio Visual</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- ========================================== -->
+    <!-- 🔤 FONT MANROPE - IMPORTED FROM GOOGLE    -->
+    <!-- ========================================== -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 300;
             background: #0a0a0a;
-            color: #ffffff;
+            color: #ece8e4;
             min-height: 100vh;
             padding: 40px 20px;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
+        .container { max-width: 900px; margin: 0 auto; }
 
         .header-calendar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding-bottom: 30px;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid #2a2a2a;
             margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 16px;
         }
 
         .header-calendar h1 {
-            font-size: 2rem;
-            font-weight: 300;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 200;
+            font-size: 2.2rem;
             letter-spacing: 2px;
+            color: #f5f3f0;
         }
 
         .header-calendar h1 i {
@@ -52,12 +54,21 @@ import disponibilidadData from '../data/disponibilidad.json';
             margin-right: 12px;
         }
 
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
         .btn-back {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid #333;
+            border: 1px solid #2a2a2a;
             border-radius: 40px;
             padding: 10px 24px;
-            color: #ffffff;
+            color: #f5f3f0;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 400;
             font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -73,12 +84,182 @@ import disponibilidadData from '../data/disponibilidad.json';
             transform: translateX(-3px);
         }
 
+        /* ========================================== */
+        /* 🔘 BOTÓN PROMO CODE                      */
+        /* ========================================== */
+        .btn-promo {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #f59e0b;
+            border-radius: 40px;
+            padding: 10px 24px;
+            color: #f59e0b;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 400;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-promo:hover {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: #fbbf24;
+            color: #fbbf24;
+            transform: scale(1.02);
+        }
+
+        .btn-promo i {
+            font-size: 1rem;
+        }
+
+        /* ========================================== */
+        /* 🎯 MODAL DEL PROMO CODE                  */
+        /* ========================================== */
+        .promo-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .promo-modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .promo-modal-content {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 40px 36px;
+            max-width: 420px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        .promo-modal-content .icon {
+            font-size: 3rem;
+            color: #f59e0b;
+            margin-bottom: 12px;
+        }
+
+        .promo-modal-content h2 {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 300;
+            font-size: 1.5rem;
+            color: #f5f3f0;
+            margin-bottom: 8px;
+        }
+
+        .promo-modal-content p {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 200;
+            color: #6a6560;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+        }
+
+        .promo-input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .promo-input-group input {
+            flex: 1;
+            padding: 12px 16px;
+            background: #0a0a0a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            color: #f5f3f0;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 300;
+            font-size: 1rem;
+            outline: none;
+            transition: border 0.3s ease;
+            text-align: center;
+            letter-spacing: 4px;
+        }
+
+        .promo-input-group input:focus {
+            border-color: #f59e0b;
+        }
+
+        .promo-input-group input::placeholder {
+            color: #444;
+            letter-spacing: 1px;
+        }
+
+        .promo-input-group .btn-accept {
+            padding: 12px 24px;
+            background: #f59e0b;
+            border: none;
+            border-radius: 8px;
+            color: #0a0a0a;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .promo-input-group .btn-accept:hover {
+            background: #fbbf24;
+            transform: scale(1.02);
+        }
+
+        .promo-input-group .btn-accept:active {
+            transform: scale(0.95);
+        }
+
+        .promo-modal-content .btn-cancel {
+            margin-top: 16px;
+            background: transparent;
+            border: none;
+            color: #6a6560;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 300;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .promo-modal-content .btn-cancel:hover {
+            color: #b5aea6;
+        }
+
+        .promo-error {
+            color: #f87171;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 300;
+            font-size: 0.85rem;
+            margin-top: 12px;
+            min-height: 24px;
+        }
+
+        /* ========================================== */
+        /* 📅 CALENDARIO                            */
+        /* ========================================== */
         .calendar-wrapper {
             background: #1a1a1a;
             border-radius: 16px;
             padding: 40px 30px;
             text-align: center;
-            border: 1px solid #333;
+            border: 1px solid #2a2a2a;
         }
 
         .calendar-wrapper .icono {
@@ -88,110 +269,135 @@ import disponibilidadData from '../data/disponibilidad.json';
         }
 
         .calendar-wrapper h2 {
+            font-family: 'Manrope', sans-serif;
             font-weight: 300;
             font-size: 1.5rem;
+            color: #f5f3f0;
             margin-bottom: 8px;
         }
 
         .calendar-wrapper .descripcion {
-            color: #888;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 200;
+            color: #b5aea6;
             font-size: 1rem;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+            font-style: italic;
         }
 
         .calendar-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 500px;
+            max-width: 400px;
             margin: 0 auto 20px;
             padding: 0 10px;
         }
 
         .calendar-nav button {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid #333;
+            border: 1px solid #2a2a2a;
             border-radius: 8px;
-            color: white;
+            color: #ece8e4;
             padding: 8px 16px;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 400;
             font-size: 0.9rem;
         }
 
         .calendar-nav button:hover {
             background: rgba(255, 255, 255, 0.1);
             border-color: #3b82f6;
+            color: #f5f3f0;
         }
 
         .calendar-nav .month-year {
-            color: #aaa;
-            font-size: 1.1rem;
+            font-family: 'Manrope', sans-serif;
             font-weight: 300;
+            color: #ece8e4;
+            font-size: 1.2rem;
+            min-width: 150px;
         }
 
-        .calendar-table {
-            width: 100%;
-            max-width: 500px;
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            max-width: 550px;
             margin: 0 auto;
-            border-collapse: collapse;
         }
 
-        .calendar-table th {
-            color: #666;
-            font-size: 0.8rem;
-            font-weight: 600;
+        .calendar-grid .day-header {
+            color: #6a6560;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 400;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            padding: 10px 8px;
-            border-bottom: 1px solid #333;
-        }
-
-        .calendar-table td {
-            padding: 12px 8px;
+            padding: 10px 4px;
             text-align: center;
-            font-size: 1rem;
-            border-bottom: 1px solid #222;
+        }
+
+        .calendar-grid .day-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 300;
+            font-size: 0.95rem;
+            border-radius: 8px;
             transition: all 0.2s ease;
-            border-radius: 4px;
+            padding: 4px;
+            border: 2px solid transparent;
+            background: rgba(255, 255, 255, 0.03);
         }
 
-        .calendar-table td.available {
+        .calendar-grid .day-cell.available {
             color: #4ade80;
-            background: rgba(74, 222, 128, 0.05);
+            background: rgba(74, 222, 128, 0.1);
+            border-color: #4ade80;
         }
 
-        .calendar-table td.available:hover {
-            background: rgba(74, 222, 128, 0.15);
+        .calendar-grid .day-cell.available:hover {
+            background: rgba(74, 222, 128, 0.2);
             transform: scale(1.05);
             cursor: pointer;
         }
 
-        .calendar-table td.partial {
+        .calendar-grid .day-cell.partial {
             color: #fbbf24;
-            background: rgba(251, 191, 36, 0.05);
+            background: rgba(251, 191, 36, 0.1);
+            border-color: #fbbf24;
         }
 
-        .calendar-table td.partial:hover {
-            background: rgba(251, 191, 36, 0.15);
+        .calendar-grid .day-cell.partial:hover {
+            background: rgba(251, 191, 36, 0.2);
             transform: scale(1.05);
             cursor: pointer;
         }
 
-        .calendar-table td.unavailable {
+        .calendar-grid .day-cell.unavailable {
             color: #f87171;
-            background: rgba(248, 113, 113, 0.05);
+            background: rgba(248, 113, 113, 0.1);
+            border-color: #f87171;
             cursor: not-allowed;
         }
 
-        .calendar-table td.past {
+        .calendar-grid .day-cell.past {
             color: #333;
             cursor: not-allowed;
             opacity: 0.3;
+            border-color: #222;
+            background: transparent;
         }
 
-        .calendar-table td.empty {
-            color: #333;
+        .calendar-grid .day-cell.empty {
+            color: #222;
+            border-color: transparent;
+            background: transparent;
         }
 
         .legend {
@@ -199,229 +405,207 @@ import disponibilidadData from '../data/disponibilidad.json';
             justify-content: center;
             gap: 30px;
             margin-top: 25px;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 300;
             font-size: 0.9rem;
             flex-wrap: wrap;
+            color: #b5aea6;
         }
 
         .legend-item {
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #aaa;
         }
 
         .legend-dot {
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
             display: inline-block;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .legend-dot.green {
-            background: #4ade80;
-        }
-
-        .legend-dot.yellow {
-            background: #fbbf24;
-        }
-
-        .legend-dot.red {
-            background: #f87171;
-        }
+        .legend-dot.green { background: #4ade80; }
+        .legend-dot.yellow { background: #fbbf24; }
+        .legend-dot.red { background: #f87171; }
 
         .contact-wrapper {
             margin-top: 50px;
-            border-top: 1px solid #333;
+            border-top: 1px solid #2a2a2a;
             padding-top: 40px;
         }
 
+        /* ========================================== */
+        /* 📱 RESPONSIVE                            */
+        /* ========================================== */
         @media (max-width: 640px) {
-            .container {
-                padding: 20px 12px;
-            }
-
-            .header-calendar {
-                flex-direction: column;
-                gap: 16px;
-                align-items: flex-start;
-            }
-
-            .header-calendar h1 {
-                font-size: 1.5rem;
-            }
-
-            .calendar-wrapper {
-                padding: 24px 16px;
-            }
-
-            .calendar-table td {
-                padding: 8px 4px;
-                font-size: 0.85rem;
-            }
-
-            .calendar-table th {
-                font-size: 0.7rem;
-                padding: 8px 4px;
-            }
-
-            .legend {
-                gap: 16px;
-                font-size: 0.8rem;
-            }
-
-            .calendar-nav .month-year {
-                font-size: 0.9rem;
-            }
-
-            .calendar-nav button {
-                padding: 6px 12px;
-                font-size: 0.8rem;
-            }
-
-            .contact-wrapper {
-                margin-top: 30px;
-                padding-top: 30px;
-            }
+            .container { padding: 20px 12px; }
+            .header-calendar { flex-direction: column; align-items: flex-start; }
+            .header-calendar h1 { font-size: 1.5rem; }
+            .header-actions { width: 100%; }
+            .btn-back { flex: 1; justify-content: center; }
+            .btn-promo { flex: 1; justify-content: center; }
+            .calendar-wrapper { padding: 24px 16px; }
+            .calendar-grid .day-cell { font-size: 0.75rem; }
+            .calendar-grid { gap: 4px; max-width: 100%; }
+            .legend { gap: 16px; font-size: 0.75rem; }
+            .calendar-nav .month-year { font-size: 0.9rem; min-width: 120px; }
+            .calendar-nav button { padding: 6px 12px; font-size: 0.8rem; }
+            .contact-wrapper { margin-top: 30px; padding-top: 30px; }
+            .promo-modal-content { padding: 30px 20px; }
+            .promo-input-group { flex-direction: column; }
+            .promo-input-group .btn-accept { width: 100%; }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- ===== HEADER ===== -->
         <div class="header-calendar">
-            <h1>
-                <i class="fas fa-calendar-alt"></i>
-                Disponibilidad
-            </h1>
-            <a href="/" class="btn-back">
-                <i class="fas fa-arrow-left"></i>
-                Volver al portafolio
-            </a>
+            <h1><i class="fas fa-calendar-alt"></i> Availability</h1>
+            <div class="header-actions">
+                <button id="promoBtn" class="btn-promo">
+                    <i class="fas fa-key"></i> Promo Code
+                </button>
+                <a href="/" class="btn-back"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
+            </div>
         </div>
 
+        <!-- ===== CALENDARIO ===== -->
         <div class="calendar-wrapper">
-            <div class="icono">
-                <i class="fas fa-calendar-check"></i>
-            </div>
-            <h2>Calendario de Sesiones</h2>
-            <p class="descripcion">
-                Selecciona una fecha disponible para tu sesión de fotografía
-            </p>
+            <div class="icono"><i class="fas fa-calendar-check"></i></div>
+            <h2>Session Calendar</h2>
+            <p class="descripcion">Select an available date for your photography session</p>
 
             <div class="calendar-nav">
                 <button id="pubPrevMonth">‹</button>
-                <span class="month-year" id="pubMonthYear">Agosto 2026</span>
+                <span class="month-year" id="pubMonthYear">September 2026</span>
                 <button id="pubNextMonth">›</button>
             </div>
 
-            <table class="calendar-table" id="pubCalendarTable">
-                <thead>
-                    <tr>
-                        <th>LUN</th>
-                        <th>MAR</th>
-                        <th>MIÉ</th>
-                        <th>JUE</th>
-                        <th>VIE</th>
-                        <th>SÁB</th>
-                        <th>DOM</th>
-                    </tr>
-                </thead>
-                <tbody id="pubCalendarBody">
-                    <!-- Generado por JavaScript -->
-                </tbody>
-            </table>
+            <div class="calendar-grid" id="pubCalendarGrid">
+                <div class="day-header">Mon</div>
+                <div class="day-header">Tue</div>
+                <div class="day-header">Wed</div>
+                <div class="day-header">Thu</div>
+                <div class="day-header">Fri</div>
+                <div class="day-header">Sat</div>
+                <div class="day-header">Sun</div>
+            </div>
 
             <div class="legend">
-                <div class="legend-item">
-                    <span class="legend-dot green"></span>
-                    Disponible
-                </div>
-                <div class="legend-item">
-                    <span class="legend-dot yellow"></span>
-                    Disponibilidad parcial
-                </div>
-                <div class="legend-item">
-                    <span class="legend-dot red"></span>
-                    No disponible
-                </div>
+                <div class="legend-item"><span class="legend-dot green"></span> Available</div>
+                <div class="legend-item"><span class="legend-dot yellow"></span> Partial Availability</div>
+                <div class="legend-item"><span class="legend-dot red"></span> Not Available</div>
             </div>
         </div>
 
+        <!-- ===== CONTACTO ===== -->
         <div class="contact-wrapper">
             <ContactForm />
         </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- 🎯 MODAL DEL PROMO CODE                   -->
+    <!-- ========================================== -->
+    <div class="promo-modal" id="promoModal">
+        <div class="promo-modal-content">
+            <div class="icon">🔑</div>
+            <h2>Enter Promo Code</h2>
+            <p>Please enter the administrator access code</p>
+            <div class="promo-input-group">
+                <input type="password" id="promoInput" placeholder="• • • •" maxlength="4" autocomplete="off">
+                <button class="btn-accept" id="promoAccept">Accept</button>
+            </div>
+            <div class="promo-error" id="promoError"></div>
+            <button class="btn-cancel" id="promoCancel">Cancel</button>
+        </div>
+    </div>
+
     <script>
-        // Datos desde el backend
-        const fechasDisponibilidad = JSON.parse('{JSON.stringify(disponibilidadData.fechas)}');
+        // ============================================
+        // 🗓️ AVAILABILITY DATA (hardcoded)
+        // ============================================
+        const fechasDisponibilidad = {
+            "2026-08-10": "unavailable",
+            "2026-08-15": "partial",
+            "2026-08-20": "unavailable",
+            "2026-08-25": "partial",
+            "2026-08-30": "unavailable",
+            "2026-09-01": "unavailable",
+            "2026-09-02": "unavailable",
+            "2026-09-05": "partial",
+            "2026-09-10": "unavailable",
+            "2026-09-12": "unavailable"
+        };
+
         const hoy = new Date();
         const currentYear = hoy.getFullYear();
         const currentMonth = hoy.getMonth();
         const currentDay = hoy.getDate();
-        
+
         const maxMonthGlobal = currentMonth + 6;
         const maxYearGlobal = currentYear + Math.floor(maxMonthGlobal / 12);
         const maxMonthFinal = maxMonthGlobal % 12;
-        
+
         let viewYear = currentYear;
         let viewMonth = currentMonth;
-        
+
         function getEstadoFecha(year, month, day) {
             const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             return fechasDisponibilidad[key] || 'available';
         }
-        
+
         function renderPublicCalendar(year, month) {
-            const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
-                           'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                           'July', 'August', 'September', 'October', 'November', 'December'];
             
             document.getElementById('pubMonthYear').textContent = `${months[month]} ${year}`;
+            
+            const grid = document.getElementById('pubCalendarGrid');
+            
+            const headers = grid.querySelectorAll('.day-header');
+            grid.innerHTML = '';
+            headers.forEach(h => grid.appendChild(h));
             
             const firstDay = new Date(year, month, 1).getDay();
             let startOffset = (firstDay === 0) ? 6 : firstDay - 1;
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             
-            let html = '';
-            let dayCount = 1;
-            
-            for (let row = 0; row < 6; row++) {
-                html += '<tr>';
-                for (let col = 0; col < 7; col++) {
-                    if (row === 0 && col < startOffset) {
-                        html += `<td class="empty"></td>`;
-                    } else if (dayCount > daysInMonth) {
-                        html += `<td class="empty"></td>`;
-                    } else {
-                        const dateObj = new Date(year, month, dayCount);
-                        const isPast = dateObj < new Date(currentYear, currentMonth, currentDay);
-                        const isBeyond = (year > maxYearGlobal) || (year === maxYearGlobal && month > maxMonthFinal);
-                        
-                        let className = '';
-                        let clickable = '';
-                        
-                        if (isPast || isBeyond) {
-                            className = 'past';
-                        } else {
-                            const estado = getEstadoFecha(year, month, dayCount);
-                            className = estado;
-                            if (estado !== 'unavailable' && estado !== 'past') {
-                                clickable = `onclick="selectPublicDate(${dayCount}, '${months[month]}', ${year})" style="cursor:pointer;"`;
-                            }
-                        }
-                        
-                        html += `<td class="${className}" ${clickable}>${dayCount}</td>`;
-                        dayCount++;
-                    }
-                }
-                html += '</tr>';
-                if (dayCount > daysInMonth) break;
+            for (let i = 0; i < startOffset; i++) {
+                const empty = document.createElement('div');
+                empty.className = 'day-cell empty';
+                grid.appendChild(empty);
             }
             
-            document.getElementById('pubCalendarBody').innerHTML = html;
+            for (let day = 1; day <= daysInMonth; day++) {
+                const cell = document.createElement('div');
+                cell.className = 'day-cell';
+                cell.textContent = day;
+                
+                const dateObj = new Date(year, month, day);
+                const isPast = dateObj < new Date(currentYear, currentMonth, currentDay);
+                const isBeyond = (year > maxYearGlobal) || (year === maxYearGlobal && month > maxMonthFinal);
+                
+                if (isPast || isBeyond) {
+                    cell.classList.add('past');
+                } else {
+                    const estado = getEstadoFecha(year, month, day);
+                    cell.classList.add(estado);
+                    if (estado !== 'unavailable' && estado !== 'past') {
+                        cell.style.cursor = 'pointer';
+                        cell.addEventListener('click', () => selectPublicDate(day, months[month], year));
+                    }
+                }
+                
+                grid.appendChild(cell);
+            }
         }
-        
+
         function selectPublicDate(day, month, year) {
-            const dateStr = `${day} de ${month}, ${year}`;
+            const dateStr = `${day} ${month}, ${year}`;
             const dateInput = document.querySelector('#date');
             if (dateInput) {
                 const monthNum = new Date(`${month} 1, ${year}`).getMonth() + 1;
@@ -433,10 +617,10 @@ import disponibilidadData from '../data/disponibilidad.json';
                 if (form) {
                     form.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
-                showNotification(`📅 Fecha seleccionada: ${dateStr}`);
+                showNotification(`📅 Selected date: ${dateStr}`);
             }
         }
-        
+
         function showNotification(message) {
             const existing = document.querySelector('.date-notification');
             if (existing) existing.remove();
@@ -458,6 +642,8 @@ import disponibilidadData from '../data/disponibilidad.json';
                 opacity: 0;
                 transition: opacity 0.3s ease;
                 box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+                font-family: 'Manrope', sans-serif;
+                font-weight: 300;
             `;
             notif.textContent = message;
             document.body.appendChild(notif);
@@ -468,33 +654,101 @@ import disponibilidadData from '../data/disponibilidad.json';
                 setTimeout(() => notif.remove(), 300);
             }, 3000);
         }
-        
+
         window.selectPublicDate = selectPublicDate;
-        
+
         document.getElementById('pubPrevMonth').addEventListener('click', () => {
             if (viewMonth === 0) { viewYear--; viewMonth = 11; }
             else { viewMonth--; }
             renderPublicCalendar(viewYear, viewMonth);
         });
-        
+
         document.getElementById('pubNextMonth').addEventListener('click', () => {
             const nextMonthCheck = viewMonth + 1;
             const nextYearCheck = viewYear + Math.floor(nextMonthCheck / 12);
             const nextMonthFinal = nextMonthCheck % 12;
-            
+
             if (nextYearCheck > maxYearGlobal || 
                 (nextYearCheck === maxYearGlobal && nextMonthFinal > maxMonthFinal)) {
-                showNotification('📅 No hay más fechas disponibles para los próximos 6 meses');
+                showNotification('📅 No more dates available for the next 6 months');
                 return;
             }
-            
+
             if (viewMonth === 11) { viewYear++; viewMonth = 0; }
             else { viewMonth++; }
             renderPublicCalendar(viewYear, viewMonth);
         });
-        
-        // Render inicial
+
         renderPublicCalendar(viewYear, viewMonth);
+
+        // ============================================
+        // 🔐 PROMO CODE LOGIC
+        // ============================================
+        const promoBtn = document.getElementById('promoBtn');
+        const promoModal = document.getElementById('promoModal');
+        const promoInput = document.getElementById('promoInput');
+        const promoAccept = document.getElementById('promoAccept');
+        const promoCancel = document.getElementById('promoCancel');
+        const promoError = document.getElementById('promoError');
+        const CORRECT_CODE = '2275';
+
+        // Abrir modal
+        promoBtn.addEventListener('click', () => {
+            promoModal.classList.add('active');
+            promoInput.value = '';
+            promoError.textContent = '';
+            promoInput.focus();
+        });
+
+        // Cerrar modal (cancel)
+        promoCancel.addEventListener('click', () => {
+            promoModal.classList.remove('active');
+            promoError.textContent = '';
+        });
+
+        // Cerrar modal (click fuera)
+        promoModal.addEventListener('click', (e) => {
+            if (e.target === promoModal) {
+                promoModal.classList.remove('active');
+                promoError.textContent = '';
+            }
+        });
+
+        // Verificar código
+        function verifyCode() {
+            const code = promoInput.value.trim();
+            if (code === CORRECT_CODE) {
+                // Redirigir al admin calendar
+                window.location.href = '/admin-calendario';
+            } else {
+                promoError.textContent = '❌ Invalid code. Please try again.';
+                promoInput.value = '';
+                promoInput.focus();
+                // Shake animation
+                promoInput.style.borderColor = '#f87171';
+                setTimeout(() => {
+                    promoInput.style.borderColor = '#2a2a2a';
+                }, 1000);
+            }
+        }
+
+        // Aceptar
+        promoAccept.addEventListener('click', verifyCode);
+
+        // Enter key
+        promoInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                verifyCode();
+            }
+        });
+
+        // Auto-focus on open
+        promoModal.addEventListener('transitionend', () => {
+            if (promoModal.classList.contains('active')) {
+                promoInput.focus();
+            }
+        });
     </script>
 </body>
 </html>
